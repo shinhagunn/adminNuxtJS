@@ -43,8 +43,7 @@
         <div class="content">
             <header class="header">
                 <div class="form-search">
-                    <input class="form-control" type="text">
-                    <button class="btn">Search</button>
+                    <input class="form-control" type="text" placeholder="Search..."><button class="btn">Search</button>
                 </div>
 
                 <div class="account">
@@ -58,7 +57,7 @@
                     </div>
                 </div>
             </header>
-            <slot class="main"></slot>
+            <slot></slot>
         </div>
     </div>
 </template>
@@ -134,17 +133,29 @@ html{
             .form-search{
                 .form-control{
                     display: inline-block;
-                    height: 26px;
+                    padding-left: 16px;
+                    width: 250px;
+                    height: 30px;
+                    background-color: rgb(240, 243, 250);
+                    border: none;
+                    border-top-left-radius: 3px;
+                    border-bottom-left-radius: 3px;
                 }
+
+                .form-control:focus{
+                    outline: none;
+                }
+
                 .btn{
+                    cursor: pointer;
                     display: inline-block;
                     width: 65px;
-                    height: 26px;
+                    height: 30px;
                     background-color: rgb(115, 125,240);
                     border: 1px solid rgb(108,118, 216);
                     color: #fff;
-                    border-top-right-radius: 5px;
-                    border-bottom-right-radius: 5px;
+                    border-top-right-radius: 3px;
+                    border-bottom-right-radius: 3px;
                 }
             }
 
@@ -173,10 +184,6 @@ html{
                     }
                 }
             }
-        }
-
-        .main{
-            padding: 0 16px;
         }
     }
 }
