@@ -1,9 +1,9 @@
 <template>
   <div class="form">
-    <form action="">
+    <form @submit.prevent>
       <input v-model="username" type="text" placeholder="Username">
       <input v-model="password" type="password" placeholder="Password">
-      <button @click="login()">Login</button>
+      <button @click="login">Login</button>
     </form>
 
     <p>{{ status }}</p>
@@ -20,9 +20,10 @@ export default class Index extends Vue {
   status = this.$store.state.authenticated;
 
   login(){
-    this.$store.commit('setUser', this.username);
-    this.$store.commit('setPass', this.password);
-    this.$store.commit('isLogin', '');
+    this.$store.commit('setUser', this.username)
+    this.$store.commit('setPass', this.password)
+    this.$store.commit('isLogin')
+    this.$router.push('/admin');
   }
 }
 </script> 
