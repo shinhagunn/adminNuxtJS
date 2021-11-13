@@ -27,12 +27,6 @@
                 </li>
                 <li :class="['item', {'item-selected': selectedItems[3]}]">
                     <a href="">
-                        <i class="fas fa-comments"></i>
-                        Comment
-                    </a>
-                </li>
-                <li :class="['item', {'item-selected': selectedItems[4]}]">
-                    <a href="">
                         <i class="fas fa-chart-line"></i>
                         Statistic
                     </a>
@@ -74,7 +68,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({})
 export default class LayoutAdmin extends Vue{
-    selectedItems = [true, false, false, false, false];
+    selectedItems = [false, false, false, false];
 }
 </script>
 
