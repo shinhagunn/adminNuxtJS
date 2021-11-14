@@ -62,22 +62,12 @@ export default class Table extends Vue {
     border-radius: 3px;
     overflow: hidden;
 
-    th{
-        background-color: rgb(50,58,71);
-        color: #fff;
-    }
-
     th, td{
-        border: 1px solid #aaa;
         padding: 12px;
     }
 
-    tr:nth-child(odd){
-        background-color: rgb(238,243,246);
-    }
-
-    tr:nth-child(even){
-        background-color: #fff;
+    td{
+        border-top: 1px solid #eee;
     }
 }
 </style>
