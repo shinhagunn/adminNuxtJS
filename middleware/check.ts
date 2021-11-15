@@ -10,7 +10,6 @@ export default async function ({ store, $axios } : Context) {
         store.commit('setState', data.state);
         store.commit('setEmail', data.email);
         store.commit('setRole', data.role);
-        
     }
     catch (error){
         return error;

@@ -26,14 +26,7 @@ export default class Index extends Vue {
   async login() {
 
     try {
-      const { data } = await this.$axios.post('http://localhost:3000/api/v2/identity/session', { email: this.email, password: this.password });
-      this.$store.commit('setId', data.id);
-      this.$store.commit('setUid', data.uid);
-      this.$store.commit('setFullname', data.full_name);
-      this.$store.commit('setLastname', data.last_name);
-      this.$store.commit('setState', data.state);
-      this.$store.commit('setEmail', data.email);
-      this.$store.commit('setRole', data.role);
+      await this.$axios.post('http://localhost:3000/api/v2/identity/session', { email: this.email, password: this.password });
       this.$router.push('/admin');
     } catch (error) {
       this.auth_error();
@@ -42,7 +35,6 @@ export default class Index extends Vue {
   }
 
   auth_error() {
-    console.log('error');
     this.$store.commit('setId', null);
     this.$store.commit('setUid', null);
     this.$store.commit('setFullname', null);
