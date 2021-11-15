@@ -17,7 +17,7 @@ interface User {
 }
 
 @Component({
-  middleware: 'auth'
+  middleware: ['check', 'notLogged']
 })
 export default class Admin extends Vue{
   columns: Column[] = [

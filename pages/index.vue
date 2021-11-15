@@ -16,9 +16,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
-import {UserRole, UserState} from '@/types/index'
 @Component({
-  // middleware: 'check'
+  middleware: ['check', 'login']
 })
 export default class Index extends Vue {
   email = '';
@@ -28,24 +27,18 @@ export default class Index extends Vue {
 
     try {
       const { data } = await this.$axios.post('http://localhost:3000/api/v2/identity/session', { email: this.email, password: this.password });
-
-      this.auth_success(data.id, data.uid, data.full_name, data.last_name, data.state, data.email, data.role);
+      this.$store.commit('setId', data.id);
+      this.$store.commit('setUid', data.uid);
+      this.$store.commit('setFullname', data.full_name);
+      this.$store.commit('setLastname', data.last_name);
+      this.$store.commit('setState', data.state);
+      this.$store.commit('setEmail', data.email);
+      this.$store.commit('setRole', data.role);
+      this.$router.push('/admin');
     } catch (error) {
       this.auth_error();
       return error;
     }
-  }
-
-  auth_success(id: number, uid: string, full_name: string, last_name: string, state: UserState, email: string, role: UserRole) {
-    console.log('success');
-    this.$store.commit('setId', id);
-    this.$store.commit('setUid', uid);
-    this.$store.commit('setFullname', full_name);
-    this.$store.commit('setLastname', last_name);
-    this.$store.commit('setState', state);
-    this.$store.commit('setEmail', email);
-    this.$store.commit('setRole', role);
-    this.$router.push('/admin');
   }
 
   auth_error() {
