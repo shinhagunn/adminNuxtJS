@@ -1,6 +1,22 @@
+export enum UserRole {
+    Admin = 'admin',
+    Member = 'member',
+}
+
+export enum UserState {
+    Loading = 'loading',
+    Active = 'active',
+    Deleted = 'deleted',
+}
+
 export default interface auth {
-    user: string;
-    pass: string;
+    id: number,
+    uid: string,
+    bio?: string,
+    fullname: string;
+    email: string;
+    state: UserState;
+    role: UserRole;
     authenticated: boolean; 
 }
 

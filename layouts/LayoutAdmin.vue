@@ -32,10 +32,10 @@
                     </a>
                 </li>
                 <li class="item">
-                    <a href="">
+                    <nuxt-link to="/">
                         <i class="fas fa-undo-alt"></i>
                         Back to website
-                    </a>
+                    </nuxt-link>
                 </li>
             </ul>
         </nav>
