@@ -47,7 +47,7 @@ export default class Index extends Vue {
 </script> 
 
 <style lang="less">
-  input, button{
+  > input, button{
     margin-left: 100px;
     padding-left: 16px;
     width: 300px;

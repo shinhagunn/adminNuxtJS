@@ -6,26 +6,26 @@
                 NuxtJS
             </h2>
             <ul class="menu-list">
-                <li :class="['item', {'item-selected': selectedItems[0]}]">
-                    <a href="">
+                <li :class="['item', {'item-selected': (selected == 1)}]">
+                    <nuxt-link to="/dashboard">
                         <i class="fas fa-home"></i>
                         Dashboard
-                    </a> 
+                    </nuxt-link> 
                 </li>
-                <li :class="['item', {'item-selected': selectedItems[1]}]">
-                    <a href="">
+                <li :class="['item', {'item-selected': (selected == 2)}]">
+                    <nuxt-link to="/dashboard/users">
                         <i class="fas fa-user"></i>
-                        User
-                    </a>
+                        Users
+                    </nuxt-link>
                     
                 </li>
-                <li :class="['item', {'item-selected': selectedItems[2]}]">
+                <li :class="['item', {'item-selected': (selected == 3)}]">
                     <a href="">
                         <i class="fas fa-music"></i>
-                        Music
+                        Musics
                     </a>
                 </li>
-                <li :class="['item', {'item-selected': selectedItems[3]}]">
+                <li :class="['item', {'item-selected': (selected == 4)}]">
                     <a href="">
                         <i class="fas fa-chart-line"></i>
                         Statistic
@@ -41,7 +41,7 @@
         </nav>
 
         <div class="content">
-            <header class="header">
+            <header class="header-top">
                 <div class="form-search">
                     <input class="form-control" type="text" placeholder="Search..."><button class="btn">Search</button>
                 </div>
@@ -52,22 +52,82 @@
                     </figure>
 
                     <div class="text">
-                        <p class="name">Hà đẹp trai</p>
-                        <p class="nickname">Đại gia ngầm</p>
+                        <p class="name">{{ user.name }}</p>
+                        <p class="nickname">{{ user.role }}</p>
                     </div>
                 </div>
             </header>
+
+            <div class="header-content">
+                <div class="title">
+                    <div class="icon">
+                        <i :class="logoNow"></i>
+                    </div>
+                    <div class="page-name">
+                        <h3>{{ pageName }}</h3>
+                    </div>
+                </div>
+
+                <div class="breadcrumb">
+                    <nuxt-link v-for="item in breadcrumb" :key="item.id" :to="'/' + item.url" class="bread-item"> {{ item.name }} /</nuxt-link> 
+                </div>
+            </div>
+
             <slot></slot>
         </div>
     </div>
 </template>
 
-<script>
-import { Component, Vue } from 'nuxt-property-decorator'
+<script lang='ts'>
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
+
+interface breadcrumb {
+    url: string;
+    name: string;
+}
 
 @Component({})
 export default class LayoutAdmin extends Vue{
-    selectedItems = [false, false, false, false];
+    @Prop() readonly selected!: number;
+    @Prop() readonly pageName!: string;
+
+    menuLogoes:string[] = [ '', 'fas fa-home', 'fas fa-user', 'fas fa-music', 'fas fa-chart-line'];
+    logoNow = this.menuLogoes[this.selected];
+
+    user = {
+        name: this.$store.state.last_name,
+        role: this.$store.state.role
+    }
+
+    get breadcrumb () {
+        const urlCurrent = this.$route.path;
+        const result:breadcrumb[] = [];
+
+        const tam = urlCurrent.split('/');
+        tam.shift();
+
+        let urlTotal = tam[0];
+
+        for(let i = 0; i < tam.length; i++) {
+            if (i > 0) {
+                const x = tam[i];
+                tam[i] = urlTotal + '/' + tam[i];
+                urlTotal = urlTotal + '/' + x;
+
+                result[i] = {
+                    name: x,
+                    url: tam[i]
+                }
+            } else {
+                result[i] = {
+                    name: 'Home',
+                    url: tam[i]
+                }
+            }
+        }
+
+        return result;
+    }
 }
 </script>
 
@@ -79,7 +139,7 @@ export default class LayoutAdmin extends Vue{
 }
 
 html{
-    background-color: rgb(238,243,246);
+    background-color: #F2F7FB;
 }
 
 .container{
@@ -89,8 +149,8 @@ html{
         top: 0;
         bottom: 0;
         left: 0;
-        width: 16.6666667%;
-        background-color: rgb(50,58,71);
+        width: 15%;
+        background-color: #263544;
         color: rgb(119, 131, 147);
 
         .menu-icon{
@@ -104,13 +164,14 @@ html{
 
             .item a{
                 display: block;
-                padding: 16px;
+                padding: 14px 0 14px 32px;
                 text-decoration: none;
-                color: rgb(119, 131, 147);
+                color: #b7c0cd;
             }
 
             .item-selected a{
-                color: white;
+                background-color: #1D2531;
+                border-left: 3px solid #007bff;
             }
 
             .item a:hover{
@@ -121,14 +182,16 @@ html{
 
     .content{
         float: right;
-        width: 83.3333333%;
-        .header{
+        width: 85%;
+        .header-top{
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 16px;
-            height: 50px;
+            padding: 0 34px;
+            height: 73px;
             background-color: white;
+            box-shadow: 0 0 5px 0 rgba(43, 43, 43, 0.1);
+
 
             .form-search{
                 .form-control{
@@ -151,8 +214,8 @@ html{
                     display: inline-block;
                     width: 65px;
                     height: 30px;
-                    background-color: rgb(115, 125,240);
-                    border: 1px solid rgb(108,118, 216);
+                    background-color: #007bff;
+                    border: 1px solid #007bff;
                     color: #fff;
                     border-top-right-radius: 3px;
                     border-bottom-right-radius: 3px;
@@ -166,8 +229,8 @@ html{
                 border-left: 1px solid gray;
 
                 .avatar{
-                    width: 35px;
-                    height: 35px;
+                    width: 38px;
+                    height: 38px;
                     background-color: gray;
                     border-radius: 50%;
                 }
@@ -182,6 +245,50 @@ html{
                     .nickname{
                         font-size: 11px;
                     }
+                }
+            }
+        }
+
+        .header-content{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 34px 34px;
+
+            .title{
+                display: flex;
+                align-items: center;
+                
+                .icon{
+                    margin-right: 16px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 40px;
+                    height: 40px;
+                    font-size: 18px;
+                    background-color: #4099ff;
+                    color: white;
+                    border-radius: 6px;
+                    box-shadow: 0 0 5px 0 rgba(43, 43, 43, 0.1);
+                }
+
+                .page-name h3{
+                    font-weight: normal;
+                    font-size: 18px;
+                }
+            }
+
+            .breadcrumb{
+                padding-right: 16px;
+                .bread-item{
+                    font-size: 14px;
+                    text-decoration: none;
+                    color: #1D2531;
+                }
+
+                .bread-item:hover{
+                    color: #4099ff;
                 }
             }
         }

@@ -1,25 +1,32 @@
 export enum UserRole {
-    Admin = 'admin',
-    Member = 'member',
+    Admin = 'Admin',
+    Member = 'Member',
+}
+
+export enum ModeTable {
+    Link = 'Link',
+    Normal = 'Normal'
 }
 
 export enum UserState {
-    Loading = 'loading',
-    Active = 'active',
-    Deleted = 'deleted',
+    Pending = 'Pending',
+    Active = 'Active',
+    Deleted = 'Deleted',
+    Banned = 'Banned'
 }
 
-export default interface auth {
-    id: number,
-    uid: string,
-    bio?: string,
-    fullname: string;
+export interface User {
+    id: number;
+    uid: string;
+    bio?: string | null;
+    first_name: string;
+    last_name: string;
     email: string;
     state: UserState;
     role: UserRole;
-    authenticated: boolean; 
+    created_at: string;
+    updated_at?: string;
 }
-
 
 export enum Align {
     Left = "left",
@@ -32,3 +39,4 @@ export interface Column {
     class?: string;
     align?: Align;
 }
+
