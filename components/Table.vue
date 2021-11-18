@@ -4,7 +4,7 @@
       <span
         v-for="col in columns"
         :key="col.key"
-        :class="[col.class, `text-${col.align || 'left'}`]"
+        :class="[col.key, col.class, `text-${col.align || 'left'}`]"
       >
         {{ col.title }}
       </span>
@@ -122,7 +122,7 @@ export default class Table extends Vue {
 
     > a,
     span {
-      flex: 1;
+      // flex: 1;
       padding: 16px;
     }
   }

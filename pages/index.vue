@@ -27,7 +27,7 @@ export default class Index extends Vue {
 
     try {
       await this.$axios.post('http://localhost:3000/api/v2/identity/session', { email: this.email, password: this.password });
-      this.$router.push('/admin');
+      this.$router.push('/dashboard');
     } catch (error) {
       this.auth_error();
       return error;

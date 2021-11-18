@@ -72,10 +72,50 @@ export default class Admin extends Vue {
   async fetch() {
     try {
       const { data } = await this.$axios.get('http://localhost:3000/api/v2/admin/users');
-      this.users = data
+
+      this.users = data;
+
+      this.users.forEach( (user) => {
+        const x = this.formatDateData(user.created_at);
+        user.created_at = x;
+      });
     } catch (error) {
       return error
     }
   }
+
+  formatDateData(data:string) {
+    return data.split('T')[0].split('-').reverse().join('/');
+  }
 }
 </script>
+
+<style lang="less">
+.id{
+  min-width: 80px;
+}
+
+.first_name{
+  min-width: 120px;
+}
+
+.last_name{
+  min-width: 120px;
+}
+
+.email{
+  min-width: 350px;
+}
+
+.state{
+  flex: 1;
+}
+
+.role{
+  flex: 1;
+}
+
+.created_at{
+  flex: 1;
+}
+</style>
