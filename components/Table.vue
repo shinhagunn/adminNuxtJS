@@ -11,47 +11,101 @@
     </div>
 
     <div class="a-table-content">
-      <div v-if="modeTable === 'Link'">
-        <nuxt-link 
-          v-for="(row, index) in data" 
-          :key="index" class="a-table-row"
-          :to="urlCurrent + '/' + row.uid">
-          <span
-            v-for="col in columns"
-            :key="col.key"
-            :class="[col.class, 'item', `text-${col.align || 'left'}`]"
-          >
-            {{ row[col.key] }}
-          </span>
-        </nuxt-link>
-      </div>
-
-      <div v-else>
-        <span v-for="(row, index) in data" :key="index" class="a-table-row">
-          <span
-            v-for="col in columns"
-            :key="col.key"
-            :class="[col.class, 'item', `text-${col.align || 'left'}`]"
-          >
-            {{ row[col.key] }}
-          </span>
+      <TableRow
+        v-for="(row, index) in data"
+        :key="index"
+        :is-router-link="isRouterLink"
+        :to="routerLink(row)"
+      >
+        <span
+          v-for="col in columns"
+          :key="col.key"
+          :class="[col.key, col.class,'item', `text-${col.align || 'left'}`]"
+        >
+          {{ row[col.key] }}
         </span>
-      </div>
+      </TableRow>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
-import { Column, ModeTable } from '~/types'
+import { Column} from '~/types'
 
 @Component({})
 export default class Table extends Vue {
   @Prop() readonly data!: any[]
   @Prop() readonly columns!: Column[]
-  @Prop() readonly modeTable!: ModeTable
-  
-  urlCurrent = this.$route.path;
+  @Prop() readonly isRouterLink!: boolean
+  @Prop() readonly routerBuilder!: string
+
+  urlCurrent = this.$route.path
+
+  routerLink(item: any) {
+    if (!this.isRouterLink) return
+    let routerBuilder = this.routerBuilder
+
+    let start_index = 0
+    for (let i = 0; i < routerBuilder.length; i++) {
+      const str = routerBuilder[i]
+      if (str === '#') {
+        start_index = i
+        continue
+      }
+      if (str === '}') {
+        const param = routerBuilder.slice(start_index, i + 1)
+        let param_key = param.replace(/#\{|\}/gi, '')
+
+        const toUpper = param_key.includes('toUpper')
+        const toLower = param_key.includes('toLower')
+
+        if (toUpper) {
+          param_key = param_key.replace('.toUpper', '')
+        } else if (toLower) {
+          param_key = param_key.replace('.toLower', '')
+        }
+
+        let value = this.getValueByKey(param_key, item)
+        if (toUpper) {
+          value = value.toUpperCase()
+        } else if (toLower) {
+          value = value.toLowerCase()
+        }
+
+        routerBuilder = routerBuilder.replace(param, value)
+        i = 0
+        continue
+      }
+    }
+
+    return routerBuilder
+  }
+
+  getValueByKey(key: string, item: any) {
+    let value
+
+    if (key.includes('.')) {
+      const keys = key.split('.')
+      let inv: any = null
+
+      for (let index = 0; index < keys.length; index++) {
+        const key = keys[index]
+
+        if (index === 0) {
+          inv = item[key]
+        } else {
+          inv = inv[key]
+        }
+      }
+
+      value = inv
+    } else {
+      value = item[key]
+    }
+
+    return value
+  }
 }
 </script>
 
@@ -86,7 +140,6 @@ export default class Table extends Vue {
   &-row:hover {
     background-color: #f3f2f2;
     box-shadow: 0 0 5px 0 rgba(43, 43, 43, 0.1);
-
   }
 
   &-content {

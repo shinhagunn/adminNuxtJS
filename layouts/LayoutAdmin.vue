@@ -6,12 +6,6 @@
                 NuxtJS
             </h2>
             <ul class="menu-list">
-                <li :class="['item', {'item-selected': (selected == 1)}]">
-                    <nuxt-link to="/dashboard">
-                        <i class="fas fa-home"></i>
-                        Dashboard
-                    </nuxt-link> 
-                </li>
                 <li :class="['item', {'item-selected': (selected == 2)}]">
                     <nuxt-link to="/dashboard/users">
                         <i class="fas fa-user"></i>

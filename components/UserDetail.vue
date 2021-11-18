@@ -7,9 +7,6 @@
           Last updated: Thời gian cập nhật mới nhất ở đây
         </p>
       </div>
-      <div class="col">
-        <button class="btn">Edit</button>
-      </div>
     </div>
 
     <div class="row">
