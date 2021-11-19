@@ -54,6 +54,14 @@
       </div>
     </div>
 
+    <div class="row">
+      <input type="file" @change="onFileChange" />
+
+      <div id="preview">
+        <img v-if="url" :src="url" />
+      </div>
+    </div>
+
     <div class="row bio">
       <p class="title">About me</p>
       <textarea class="bio">About me...</textarea>
@@ -74,6 +82,7 @@ import { UserState, UserRole } from '~/types'
 export default class UserDetail extends Vue {
   @Prop() readonly user!: any
 
+  url:string | null = null
   state = UserState.Active
   role = UserRole.Member
 
@@ -112,6 +121,11 @@ export default class UserDetail extends Vue {
 
   formatDateData(data:string) {
     return data.split('T')[0].split('-').reverse().join('/');
+  }
+
+  onFileChange(e: any) {
+    const file = e.target.files[0];
+    this.url = URL.createObjectURL(file);
   }
 }
 </script>

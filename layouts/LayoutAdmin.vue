@@ -42,7 +42,7 @@
 
                 <div class="account">
                     <figure class="avatar">
-                        <img src="" alt="">
+                        <img :src="'http://localhost:3000/api/v2/public/users/' + user.id + '/avatar'" alt="">
                     </figure>
 
                     <div class="text">
@@ -89,6 +89,7 @@ export default class LayoutAdmin extends Vue{
     logoNow = this.menuLogoes[this.selected];
 
     user = {
+        id: this.$store.state.id,
         name: this.$store.state.last_name,
         role: this.$store.state.role
     }
