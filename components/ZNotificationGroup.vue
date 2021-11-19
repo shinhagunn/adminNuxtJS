@@ -45,18 +45,23 @@ export default class ZNotificationGroup extends Vue {
 .z-notification {
   position: relative;
   display: flex;
-  background-color: var(--dropdown-background);
+  background-color: #f2f2f2;
   padding: 16px 24px;
   margin-bottom: 16px;
   overflow: hidden;
   border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(140, 162, 214, 0.1);
-
+  box-shadow: 0 0 4px 5px rgba(140, 162, 214, 0.1);
+  font-family: Arial, Helvetica, sans-serif;
+  
   &-icon {
     margin-right: 12px;
+    width: 4px;
+    height: 48px;
     font-size: 20px;
+    background-color: red;
+    border-radius: 4px;
   }
-
+  
   &-group {
     &-topRight {
       width: 384px;
@@ -64,33 +69,34 @@ export default class ZNotificationGroup extends Vue {
       top: 55px;
       right: 16px;
       opacity: 1;
-
+  
       &-enter-active, &-leave-active {
         transition: all 0.3s;
       }
-
+  
       &-enter, &-leave-to /* .list-leave-active below version 2.1.8 */ {
         opacity: 0;
         transform: translateX(100%);
       }
     }
   }
-
+  
   &-title {
     display: inline-block;
     padding-right: 24px;
     font-size: 16px;
+    font-weight: bold;
     line-height: 24px;
     margin-bottom: 8px;
     color: var(--white-color);
   }
-
+  
   &-description {
     font-size: 14px;
     font-weight: normal;
     color: var(--action-color);
   }
-
+  
   &-close {
     font-size: 12px;
     cursor: pointer;
@@ -98,7 +104,7 @@ export default class ZNotificationGroup extends Vue {
     right: 14px;
     color: var(--gray-color);
     transition: all 0.3s;
-
+  
     &:hover {
       color: var(--action-color);
     }

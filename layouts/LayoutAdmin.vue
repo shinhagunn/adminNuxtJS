@@ -107,9 +107,11 @@ export default class LayoutAdmin extends Vue{
                 const x = tam[i];
                 tam[i] = urlTotal + '/' + tam[i];
                 urlTotal = urlTotal + '/' + x;
+                let y = x[0].toUpperCase();
+                y += x.slice(1);
 
                 result[i] = {
-                    name: x,
+                    name: y,
                     url: tam[i]
                 }
             } else {

@@ -40,6 +40,12 @@ export default {
     '@nuxtjs/stylelint-module',
   ],
 
+  i18n: {
+    vueI18n: {
+      fallbackLocale: 'en',
+    }
+  },
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
@@ -48,6 +54,29 @@ export default {
     '@nuxtjs/pwa',
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
+    [
+      '@nuxtjs/i18n',
+      {
+        strategy: 'prefix_except_default',
+        locales: [
+          {
+            code: 'en',
+            name: 'English',
+            file: 'en-US/index.ts'
+          },
+        ],
+        lazy: true,
+        defaultLocale: 'en',
+        langDir: 'lang/',
+        detectBrowserLanguage: {
+          useCookie: false,
+          cookieKey: 'learn_i18n',
+          redirectOn: 'root', // recommended
+          alwaysRedirect: true,
+          cookieCrossOrigin: true
+        }
+      }
+    ]
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

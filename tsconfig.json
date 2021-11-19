@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "preserve",
     "target": "ES2018",
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -10,6 +11,7 @@
     ],
     "esModuleInterop": true,
     "allowJs": true,
+    "jsxFactory": "VueTsxSupport",
     "sourceMap": true,
     "strict": true,
     "noEmit": true,
@@ -26,6 +28,7 @@
     },
     "types": [
       "@nuxt/types",
+      "@nuxtjs/i18n",
       "@nuxtjs/axios",
       "@nuxt/content",
       "@types/node"

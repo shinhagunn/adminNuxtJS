@@ -1,10 +1,11 @@
 <template>
   <!-- 2 -->
   <div class="loading-comp">
-    <div class="loader loader--style2" title="1">
+    <h2>Loading ...</h2>
+    <div class="loader loader--style2">
       <svg
-        version="1.1"
         id="loader-1"
+        version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
         x="0px"
@@ -39,22 +40,33 @@ export default {}
 </script>
 
 <style lang='less'>
-
-.loader {
-  height: 100px;
-  width: 20%;
-  text-align: center;
-  padding: 1em;
-  margin: 0 auto 1em;
-  display: inline-block;
-  vertical-align: top;
+.loading-comp{
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 15%;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .loader {
+    height: 100px;
+    width: 20%;
+    text-align: center;
+    padding: 1em;
+    margin: 0 auto 1em;
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  /*
+      Set the color of the icon
+      */
+  svg path,
+  svg rect {
+    fill: #ff6700;
+  }
 }
 
-/*
-    Set the color of the icon
-    */
-svg path,
-svg rect {
-  fill: #ff6700;
-}
 </style>

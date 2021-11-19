@@ -1,6 +1,6 @@
 export enum UserRole {
-    Admin = 'Admin',
-    Member = 'Member',
+    Admin = 'admin',
+    Member = 'member',
 }
 
 export enum ModeTable {
@@ -9,10 +9,10 @@ export enum ModeTable {
 }
 
 export enum UserState {
-    Pending = 'Pending',
-    Active = 'Active',
-    Deleted = 'Deleted',
-    Banned = 'Banned'
+    Pending = 'pending',
+    Active = 'active',
+    Deleted = 'deleted',
+    Banned = 'banned'
 }
 
 export interface User {

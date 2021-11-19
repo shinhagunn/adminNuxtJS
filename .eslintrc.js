@@ -13,6 +13,7 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    "camelcase": "off"
+    "camelcase": "off",
+    "no-warning-comments": 0,
   }
 }

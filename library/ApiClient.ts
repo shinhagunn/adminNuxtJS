@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import ZNotification from '@/library/z-notification'
 
 export const jsonToParam = (json: any, first_str = "?") => {
   const parts: string[] = [];
@@ -18,10 +19,10 @@ const formatError =  (e: any) => {
   const { response } = e;
   const { error } = response.data;
 
-  if (response.status !== 401) {
-    // Check error
-    console.log(error.response.data);
-  }
+  ZNotification.error({
+    title: "Error",
+    description: window.$nuxt.$t(error).toString()
+  })
 
   sleep(10);
 };
@@ -41,7 +42,7 @@ const getClient = (baseURL: string) => {
 class ApiClient {
   private client: AxiosInstance;
   constructor() {
-    this.client = getClient("http://localhost:3000");
+    this.client = getClient("http://localhost:3000/api/v2");
   }
 
   async get(url: string, data: any = {}, conf: AxiosRequestConfig = {}) {

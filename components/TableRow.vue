@@ -14,6 +14,5 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 export default class TableRow extends Vue {
   @Prop() readonly isRouterLink!: boolean
   @Prop() readonly to!: string
-
 }
 </script>
