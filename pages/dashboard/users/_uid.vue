@@ -9,6 +9,7 @@
 </template>
 
 <script lang='ts'>
+import { Context } from '@nuxt/types';
 import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({
@@ -25,18 +26,27 @@ export default class Uid extends Vue {
   pageName = 'User Detail'
   user: any = null;
 
-  async fetch() {
-    try {
-      const { data } = await this.$axios.get('http://localhost:3000/api/v2/admin/users');
+  // async fetch() {
+  //   try {
+  //     const { data } = await this.$axios.get('http://localhost:3000/api/v2/admin/users');
 
-      this.user = data.find((x:any) => {
-        return x.uid === this.$route.params.uid;
-      });
+  //     this.user = data.find((x:any) => {
+  //       return x.uid === this.$route.params.uid;
+  //     });
 
-    } catch (error) {
-      return error
+  //   } catch (error) {
+  //     return error
+  //   }
+  // }
+
+   asyncData ({ params, $axios }: Context) {
+      return $axios.get(`http://localhost:3000/api/v2/admin/users/${params.uid}`).then(res => {
+
+          return {
+            user: res.data
+          }
+      })
     }
-  }
 
   formatDateData(data:string) {
     return data.split('T')[0].split('-').reverse().join('/');

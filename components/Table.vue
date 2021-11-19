@@ -11,6 +11,8 @@
     </div>
 
     <div class="a-table-content">
+      <LoadingAnim v-if="loading" />
+      <EmptyPage v-else-if="data.length === 0" />
       <TableRow
         v-for="(row, index) in data"
         :key="index"
@@ -20,7 +22,7 @@
         <span
           v-for="col in columns"
           :key="col.key"
-          :class="[col.key, col.class,'item', `text-${col.align || 'left'}`]"
+          :class="[col.key, col.class, 'item', `text-${col.align || 'left'}`]"
         >
           {{ row[col.key] }}
         </span>
@@ -31,7 +33,7 @@
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
-import { Column} from '~/types'
+import { Column } from '~/types'
 
 @Component({})
 export default class Table extends Vue {
@@ -39,6 +41,7 @@ export default class Table extends Vue {
   @Prop() readonly columns!: Column[]
   @Prop() readonly isRouterLink!: boolean
   @Prop() readonly routerBuilder!: string
+  @Prop() readonly loading!: boolean
 
   urlCurrent = this.$route.path
 

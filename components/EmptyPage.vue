@@ -1,7 +1,7 @@
 <template>
   <!-- 2 -->
   <div class="loading-comp">
-    <h2 class="error-text">Error Page</h2>
+    <h2 class="empty">Empty Page</h2>
   </div>
 </template>
 
@@ -20,10 +20,10 @@ export default {}
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
 
-  .error-text{
-      color: red;
-  }
+.empty{
+  color: #bbb;
 }
 
 </style>

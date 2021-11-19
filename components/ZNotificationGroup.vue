@@ -45,11 +45,12 @@ export default class ZNotificationGroup extends Vue {
 .z-notification {
   position: relative;
   display: flex;
-  background-color: #f2f2f2;
+  background-color: #FCEDE9;
   padding: 16px 24px;
   margin-bottom: 16px;
   overflow: hidden;
-  border-radius: 4px;
+  border: 1px solid #FDE0DA;
+  border-radius: 8px;
   box-shadow: 0 0 4px 5px rgba(140, 162, 214, 0.1);
   font-family: Arial, Helvetica, sans-serif;
   
@@ -98,7 +99,7 @@ export default class ZNotificationGroup extends Vue {
   }
   
   &-close {
-    font-size: 12px;
+    font-size: 16px;
     cursor: pointer;
     position: absolute;
     right: 14px;

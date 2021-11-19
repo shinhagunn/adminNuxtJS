@@ -53,7 +53,7 @@ const createNotification = (type: NotificationType) => {
               </div>
             </div>
             <div class="z-notification-close">
-              <i class="z-icon-close" onClick={this.close} />
+              <i class="fas fa-times" onClick={this.close} />
             </div>
           </div>
         )

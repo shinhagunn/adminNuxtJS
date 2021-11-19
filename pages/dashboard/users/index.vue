@@ -1,14 +1,13 @@
 <template>
   <LayoutAdmin :selected="selected" :pageName="pageName" class="page-users">
-    <LoadingAnim v-if="isLoading"/>
-    <ErrorPage v-else-if="isError"/>
-    <div class="main" v-else >
+    <div class="main">
       <Block blockName="Table Users">
         <Table
           :data="users"
           :columns="columns"
           :is-router-link="true"
           :router-builder="'/dashboard/users/#{uid}'"
+          :loading="loading"
         />
       </Block>
     </div>
@@ -69,8 +68,7 @@ export default class Admin extends Vue {
 
   users: User[] = []
 
-  isLoading = true;
-  isError = false;
+  loading = true;
   selected: number = 2
   pageName: string = 'Users'
   modeTable = ModeTable.Link
@@ -80,14 +78,13 @@ export default class Admin extends Vue {
       const { data } = await this.$axios.get('http://localhost:3000/api/v2/admin/users');
 
       this.users = data;
-      this.isLoading = false;
+      this.loading = false;
 
       this.users.forEach( (user) => {
         const x = this.formatDateData(user.created_at);
         user.created_at = x;
       });
     } catch (error) {
-      this.isError = true;
       return error
     }
   }
