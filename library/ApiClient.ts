@@ -27,10 +27,23 @@ const formatError =  (e: any) => {
   sleep(10);
 };
 
+const formatSucces =  () => {
+
+  ZNotification.success({
+    title: "Success",
+    description: "Success"
+  })
+
+  sleep(10);
+};
+
 const getClient = (baseURL: string) => {
   const client = axios.create({ baseURL });
   client.interceptors.response.use(
-    (response) => Promise.resolve(response),
+    (response) => {
+      formatSucces();
+      Promise.resolve(response)
+    },
     (error) => {
       formatError(error);
       return Promise.reject(error);

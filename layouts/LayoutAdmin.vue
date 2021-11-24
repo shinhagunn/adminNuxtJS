@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="breadcrumb">
-                    <nuxt-link v-for="item in breadcrumb" :key="item.id" :to="'/' + item.url" class="bread-item"> {{ item.name }} /</nuxt-link> 
+                    <nuxt-link v-for="item in breadcrumb" :key="item.id" :to="'/' + item.url" class="bread-item"> {{ item.name }}</nuxt-link> 
                 </div>
             </div>
 
@@ -104,7 +104,7 @@ export default class LayoutAdmin extends Vue{
         let urlTotal = tam[0];
 
         for(let i = 0; i < tam.length; i++) {
-            if (i > 0) {
+            if (i === (tam.length - 1)) {
                 const x = tam[i];
                 tam[i] = urlTotal + '/' + tam[i];
                 urlTotal = urlTotal + '/' + x;
@@ -115,14 +115,24 @@ export default class LayoutAdmin extends Vue{
                     name: y,
                     url: tam[i]
                 }
-            } else {
+            } else if (i > 0) {
+                const x = tam[i];
+                tam[i] = urlTotal + '/' + tam[i];
+                urlTotal = urlTotal + '/' + x;
+                let y = x[0].toUpperCase();
+                y += x.slice(1);
+
                 result[i] = {
-                    name: 'Home',
+                    name: y + ' / ',
+                    url: tam[i]
+                }
+            }else {
+                result[i] = {
+                    name: 'Home / ',
                     url: tam[i]
                 }
             }
         }
-
         return result;
     }
 }

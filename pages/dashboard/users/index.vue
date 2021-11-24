@@ -90,7 +90,7 @@ export default class Admin extends Vue {
   }
 
   formatDateData(data:string) {
-    return data.split('T')[0].split('-').reverse().join('/');
+    return data.split('T')[0].split('-').join('/');
   }
 }
 </script>

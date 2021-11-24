@@ -59,8 +59,19 @@ export default class ZNotificationGroup extends Vue {
     width: 4px;
     height: 48px;
     font-size: 20px;
-    background-color: red;
     border-radius: 4px;
+
+    &.text-down{
+      background-color: #EB4E2C;
+    }
+
+    &.text-up{
+      background-color: #3FBD60;
+    }
+
+    &.text-warn{
+      background-color: #EE9500;
+    }
   }
   
   &-group {
