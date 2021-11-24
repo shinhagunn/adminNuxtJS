@@ -20,7 +20,7 @@ export default class Table extends Vue {
     padding: 16px;
     background-color: #fff;
     border-radius: 3px;
-    box-shadow: 0 0 5px 0 rgba(43, 43, 43, 0.1);
+    box-shadow: 0 0 5px 0 rgba(43, 43, 43, 0.15);
 
     h2{
       font-size: 16px;
