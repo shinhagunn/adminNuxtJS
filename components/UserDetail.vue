@@ -1,17 +1,35 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col">
+      <div class="col-6">
         <p class="email">{{ user.email }}</p>
         <p class="updated-at">
           Last updated: {{ formatDateData(user.updated_at) }}
         </p>
       </div>
+      <div class="col-6">
+        <div class="row">
+          <div class="col-6">
+            <span class="title">First Name</span>
+          </div>
+          <div class="col-6">
+            <span class="title">Last Name</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <p class="user-infor">{{user.first_name}}</p>
+          </div>
+          <div class="col-6">
+            <p class="user-infor">{{user.last_name}}</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="row">
       <div class="col-3">
-        <span class="title">UID</span>
+        <span class="title">ID</span>
       </div>
       <div class="col-3">
         <span class="title">Created At</span>
@@ -26,7 +44,7 @@
 
     <div class="row">
       <div class="col col-3">
-        <p class="user-infor">{{user.uid}}</p>
+        <p class="user-infor">{{user.id}}</p>
       </div>
       <div class="col col-3">
         <p class="user-infor">{{ formatDateData(user.created_at) }}</p>
@@ -34,9 +52,9 @@
 
       <div class="col col-3">
         <div class="select">
-          <a href="#" class="choose">{{user.state}}</a>
+          <a href="#" class="choose">{{state}}</a>
           <div class="option">
-            <div v-for="item in userState" :key="item" :data="item" class="child" @click="changeState($event)" @click.stop>
+            <div v-for="item in userState" :key="item" :data="item" class="child" @click="changeState(item)">
               {{ item }}
             </div>
           </div>
@@ -44,9 +62,9 @@
       </div>
       <div class="col col-3">
         <div class="select">
-          <a href="#" class="choose">{{user.role}}</a>
+          <a href="#" class="choose">{{role}}</a>
           <div class="option">
-            <div v-for="item in userRole" :key="item" :data="item" class="child" @click="changeRole($event)" @click.stop>
+            <div v-for="item in userRole" :key="item" :data="item" class="child" @click="changeRole(item)">
               {{ item }}
             </div>
           </div>
@@ -54,43 +72,52 @@
       </div>
     </div>
 
-    <div class="row">
-      <input type="file" @change="onFileChange" />
-
-      <div id="preview">
-        <img v-if="url" :src="url" />
+    <div class="row row-column">
+      <p class="title">Avatar</p>
+      <label id="imagePre" for="upFile">
+        <img  id="preview"  :src="url" />
+        <div class="overlay">
+          <i class="fas fa-upload text"></i>
+        </div>
+      </label>
+      <div>
+        <input id="upFile" name="" type="file" @change="onFileChange"/>
       </div>
     </div>
 
     <div class="row bio">
       <p class="title">About me</p>
-      <textarea class="bio">About me...</textarea>
+      <textarea v-model="bio" class="bio"></textarea>
     </div>
 
     <div class="row end">
-      <button class="btn">Update</button>
+      <button @click="updateUser" class="btn">Update</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
-import { UserState, UserRole } from '~/types'
+import ApiClient from '~/library/ApiClient';
+import { UserState, UserRole} from '~/types'
 @Component({
   middleware: ['check', 'notLogged'],
 })
 export default class UserDetail extends Vue {
   @Prop() readonly user!: any
 
-  url:string | null = null
-  state = UserState.Active
-  role = UserRole.Member
+  url = `https://learn.huuhait.me/api/v2/public/users/${this.user.id}/avatar`;
+  state = this.user.state;
+  role = this.user.role;
+  bio = this.user.bio;
+  avatar:any;
+  isUpImage = false;
 
   get userState() {
     const result = []
 
     for (const value in UserState) {
-      result.push(value)
+      result.push(value.toLowerCase())
     }
 
     return result
@@ -100,7 +127,7 @@ export default class UserDetail extends Vue {
     const result = []
 
     for (const value in UserRole) {
-      result.push(value)
+      result.push(value.toLowerCase())
     }
 
     return result
@@ -110,13 +137,13 @@ export default class UserDetail extends Vue {
   //   console.log('ahihi');
   // }
 
-  changeState(e:any){
-    this.user.state = e.target.getAttribute('data');
+  changeState(state: UserState){
+    this.state = state;
     // e.target.parentElement.style.display = "none";
   }
 
-  changeRole(e:any){
-    this.user.role = e.target.getAttribute('data');
+  changeRole(role: UserRole){
+    this.role = role;
   }
 
   formatDateData(data:string) {
@@ -124,8 +151,24 @@ export default class UserDetail extends Vue {
   }
 
   onFileChange(e: any) {
-    const file = e.target.files[0];
-    this.url = URL.createObjectURL(file);
+    this.avatar = e.target.files[0];
+    this.url = URL.createObjectURL(this.avatar);
+  }
+
+  async updateUser() {
+    const data = new FormData();
+    data.set('first_name', this.user.first_name);
+    data.set('last_name', this.user.last_name);
+    data.set('state', this.state);
+    data.set('role', this.role);
+    data.set('bio', this.bio);
+    data.set('avatar', this.avatar as File);
+    try {
+      await new ApiClient().put(`admin/users/${this.user.uid}`, data);
+      this.$router.push('/dashboard/users');
+    } catch (error) {
+      return error;
+    }
   }
 }
 </script>
@@ -135,7 +178,12 @@ export default class UserDetail extends Vue {
   .row {
     display: flex;
     align-items: center;
-    margin: 16px 0;
+    margin-top: 8px;
+
+    &-column{
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
     &.bio{
       flex-direction: column;
@@ -162,6 +210,7 @@ export default class UserDetail extends Vue {
     }
 
     .updated-at {
+      // padding-bottom: 16px;
       padding-right: 320px;
       font-size: 14px;
     }
@@ -179,7 +228,7 @@ export default class UserDetail extends Vue {
 
     .title {
       display: block;
-      padding-top: 16px;
+      // padding-top: 16px;
       font-weight: 600;
     }
 
@@ -250,10 +299,61 @@ export default class UserDetail extends Vue {
     .select:hover > .option {
       display: block;
     }
+
+    #imagePre{
+      position: relative;
+      margin: 16px 0;
+
+      #preview{
+        display: block;
+        width: auto;
+        height: 200px;
+      }
+  
+      #preview:hover{
+        background-color: black;
+      }
+
+      .overlay{
+        position: absolute;
+        top:0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+        transition: 0.3s ease;
+        background-color: rgba(43, 43, 43, 0.7);
+      }
+
+      .text{
+        color: white;
+        font-size: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
+    }
+
+    #imagePre:hover > .overlay {
+      opacity: 1;
+      cursor: pointer;
+    }
+  
+    #upFile{
+      display: none;
+    }
   }
 
   .col-3 {
     width: 25%;
+  }
+
+  .col-6 {
+    width: 50%;
   }
 }
 </style>
