@@ -1,6 +1,6 @@
 <template>
   <LayoutAdmin :selected="selected" :pageName="pageName" class="page-users">
-    <h2>{{urlFilter}}</h2>
+    <button @click="filterTable('?state=active')">Ấn vào đây để lọc mẫu</button>
     <div class="main">
       <Block blockName="Table Users">
         <Table
@@ -74,7 +74,21 @@ export default class Admin extends Vue {
   pageName: string = 'Users'
   modeTable = ModeTable.Link
 
-  urlFilter = this.$route.params;
+  async filterTable(params: string) {
+    try {
+      const { data } = await this.$axios.get(`http://localhost:3000/api/v2/admin/users${params}`);
+
+      this.users = data;
+      this.loading = false;
+
+      this.users.forEach( (user) => {
+        const x = this.formatDateData(user.created_at);
+        user.created_at = x;
+      });
+    } catch (error) {
+      return error
+    }
+  }
 
   async fetch() {
     try {

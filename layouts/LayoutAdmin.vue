@@ -34,7 +34,9 @@
 
         <div class="content">
             <header class="header-top">
-                
+                <div class="filter" @click="showFilter = true">
+                    <i class="fas fa-filter"></i>
+                </div>
             </header>
 
             <div class="header-content">
@@ -54,6 +56,16 @@
 
             <slot></slot>
         </div>
+
+        <!-- <transition name="fade"> -->
+            <div v-if="showFilter" class="drawer" @click="showFilter = false">
+                <transition name="fade">
+                    <div class="main" @click.stop>
+                        Filter ở đây
+                    </div>
+                </transition>
+            </div>
+        <!-- </transition> -->
     </div>
 </template>
 
@@ -72,6 +84,7 @@ export default class LayoutAdmin extends Vue{
 
     menuLogoes:string[] = [ '', 'fas fa-home', 'fas fa-user', 'fas fa-music', 'fas fa-chart-line'];
     logoNow = this.menuLogoes[this.selected];
+    showFilter = false;
 
     user = {
         id: this.$store.state.id,
@@ -189,12 +202,21 @@ html{
         width: 85%;
         .header-top{
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
             padding: 0 34px;
             height: 73px;
             background-color: white;
             box-shadow: 0 0 5px 0 rgba(43, 43, 43, 0.15);
+
+            .filter{
+                font-size: 20px;
+            }
+
+            .filter:hover{
+                color:#007bff;
+                cursor: pointer;
+            }
         }
 
         .header-content{
@@ -240,6 +262,42 @@ html{
                 }
             }
         }
+    }
+
+    .drawer{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background-color: rgba(43, 43, 43, 0.3);
+
+        .main{
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 20%;
+            background-color: #fff;
+        }
+    }
+
+    // .fade-enter-active, .fade-leave-active {
+    //     transition: opacity .3s;
+    // }
+    // .fade-enter, .fade-leave-to {
+    //     opacity: 0;
+    // }
+
+    .fade-enter-active {
+        transition: all .3s ease;
+    }
+    .fade-leave-active {
+        transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .fade-enter, .fade-leave-to{
+        transform: translateX(20%);
+        opacity: 0;
     }
 }
 </style>
