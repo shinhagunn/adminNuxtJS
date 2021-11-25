@@ -43,14 +43,14 @@
     </div>
 
     <div class="row">
-      <div class="col col-3">
+      <div class="col-3">
         <p class="user-infor">{{user.id}}</p>
       </div>
-      <div class="col col-3">
+      <div class="col-3">
         <p class="user-infor">{{ formatDateData(user.created_at) }}</p>
       </div>
 
-      <div class="col col-3">
+      <div class="col-3">
         <div class="select">
           <a href="#" class="choose">{{state}}</a>
           <div class="option">
@@ -60,14 +60,16 @@
           </div>
         </div>
       </div>
-      <div class="col col-3">
-        <div class="select">
-          <a href="#" class="choose">{{role}}</a>
-          <div class="option">
-            <div v-for="item in userRole" :key="item" :data="item" class="child" @click="changeRole(item)">
-              {{ item }}
+      <div class="col-3">
+        <div class="select" @mouseover="show = true" @mouseleave="show = false">
+          <a href="#" class="choose"  >{{role}}</a>
+          <transition name="fade">
+            <div v-if="show" class="option">
+              <div v-for="item in userRole" :key="item" :data="item" class="child" @click="changeRole(item)">
+                {{ item }}
+              </div>
             </div>
-          </div>
+          </transition>
         </div>
       </div>
     </div>
@@ -91,7 +93,7 @@
     </div>
 
     <div class="row end">
-      <button @click="updateUser" class="btn">Update</button>
+      <button class="btn" @click="updateUser" >Update</button>
     </div>
   </div>
 </template>
@@ -112,6 +114,9 @@ export default class UserDetail extends Vue {
   bio = this.user.bio;
   avatar:any;
   isUpImage = false;
+
+  // test transition vuejs
+  show = false;
 
   get userState() {
     const result = []
@@ -196,6 +201,11 @@ export default class UserDetail extends Vue {
         width: 100%;
         height: 200px;
         font-size: 14px;
+        border: 1px solid rgba(43, 43, 43, 0.15);
+      }
+
+      .bio:focus{
+        outline: none;
       }
     }
 
@@ -239,17 +249,18 @@ export default class UserDetail extends Vue {
 
     .select {
       position: relative;
-      width: 300px;
+      margin-right: 16px;
 
       .choose {
         display: inline-block;
-        width: 300px;
+        width: 100%;
+        max-width: 300px;
         padding: 8px;
         height: 36px;
         font-size: 16px;
         color: #000;
         text-decoration: none;
-        border: 1px solid #aaa;
+        border: 1px solid rgba(43, 43, 43, 0.15);
         border-radius: 4px;
         border-collapse: collapse;
       }
@@ -273,10 +284,10 @@ export default class UserDetail extends Vue {
         left: 0;
         right: 0;
         padding: 8px 0;
-        transition: all 1s;
-        display: none;
-        border: 1px solid #aaa;
-        box-shadow: 0 0 5px 6px rgba(43, 43, 43, 0.1);
+        // transition: all 1s;
+        // display: none;
+        border: 1px solid rgba(43, 43, 43, 0.15);
+        box-shadow: 0 0 5px rgba(43, 43, 43, 0.15);
         border-radius: 4px;
         background-color: #fff;
         z-index: 99;
@@ -293,12 +304,12 @@ export default class UserDetail extends Vue {
     }
 
     .select:hover{
-        box-shadow: 0 0 5px 6px rgba(43, 43, 43, 0.1);
+        box-shadow: 0 0 5px rgba(43, 43, 43, 0.1);
     }
 
-    .select:hover > .option {
-      display: block;
-    }
+    // .select:hover > .option {
+    //   display: block;
+    // }
 
     #imagePre{
       position: relative;
