@@ -1,5 +1,6 @@
 <template>
   <LayoutAdmin :selected="selected" :pageName="pageName" class="page-users">
+    <h2>{{urlFilter}}</h2>
     <div class="main">
       <Block blockName="Table Users">
         <Table
@@ -72,6 +73,8 @@ export default class Admin extends Vue {
   selected: number = 2
   pageName: string = 'Users'
   modeTable = ModeTable.Link
+
+  urlFilter = this.$route.params;
 
   async fetch() {
     try {
