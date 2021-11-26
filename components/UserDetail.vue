@@ -51,20 +51,22 @@
       </div>
 
       <div class="col-3">
-        <div class="select">
+        <div class="select" @mouseover="dropDownState = true" @mouseleave="dropDownState = false">
           <a href="#" class="choose">{{state}}</a>
-          <div class="option">
-            <div v-for="item in userState" :key="item" :data="item" class="child" @click="changeState(item)">
-              {{ item }}
+          <transition name="dropdown">
+            <div v-if="dropDownState" class="option">
+              <div v-for="item in userState" :key="item" :data="item" class="child" @click="changeState(item)">
+                {{ item }}
+              </div>
             </div>
-          </div>
+          </transition>
         </div>
       </div>
       <div class="col-3">
-        <div class="select" @mouseover="show = true" @mouseleave="show = false">
+        <div class="select" @mouseover="dropDownRole = true" @mouseleave="dropDownRole = false">
           <a href="#" class="choose"  >{{role}}</a>
-          <transition name="fade">
-            <div v-if="show" class="option">
+          <transition name="dropdown">
+            <div v-if="dropDownRole" class="option">
               <div v-for="item in userRole" :key="item" :data="item" class="child" @click="changeRole(item)">
                 {{ item }}
               </div>
@@ -114,9 +116,8 @@ export default class UserDetail extends Vue {
   bio = this.user.bio;
   avatar:any;
   isUpImage = false;
-
-  // test transition vuejs
-  show = false;
+  dropDownRole = false;
+  dropDownState = false;
 
   get userState() {
     const result = []
@@ -284,13 +285,12 @@ export default class UserDetail extends Vue {
         left: 0;
         right: 0;
         padding: 8px 0;
-        // transition: all 1s;
-        // display: none;
+        // height: 0%;
         border: 1px solid rgba(43, 43, 43, 0.15);
         box-shadow: 0 0 5px rgba(43, 43, 43, 0.15);
         border-radius: 4px;
         background-color: #fff;
-        z-index: 99;
+        z-index: 1;
         .child {
           border-bottom: none;
           padding: 8px;

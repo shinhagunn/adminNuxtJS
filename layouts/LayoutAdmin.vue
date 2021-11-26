@@ -34,7 +34,7 @@
 
         <div class="content">
             <header class="header-top">
-                <div class="filter" @click="showFilter = true">
+                <div class="filter" @click="onFilter">
                     <i class="fas fa-filter"></i>
                 </div>
             </header>
@@ -57,20 +57,29 @@
             <slot></slot>
         </div>
 
-        <!-- <transition name="fade"> -->
-            <div v-if="showFilter" class="drawer" @click="showFilter = false">
-                <transition name="fade">
-                    <div class="main" @click.stop>
-                        Filter ở đây
-                    </div>
-                </transition>
+        <transition name="fade">
+            <div v-if="overlay" class="overlay" @click="offFilter">
             </div>
-        <!-- </transition> -->
+        </transition>
+
+        <transition name="slide-fade">
+            <div v-if="filter" class="drawer">
+                <div class="header">
+                    <i class="fas fa-times" @click="offFilter"></i>
+                    Filter data here
+                </div>
+                
+                <div class="content">
+                    
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import { Filter } from '~/types';
 
 interface breadcrumb {
     url: string;
@@ -81,15 +90,27 @@ interface breadcrumb {
 export default class LayoutAdmin extends Vue{
     @Prop() readonly selected!: number;
     @Prop() readonly pageName!: string;
+    @Prop() readonly filters!: Filter;
 
     menuLogoes:string[] = [ '', 'fas fa-home', 'fas fa-user', 'fas fa-music', 'fas fa-chart-line'];
     logoNow = this.menuLogoes[this.selected];
-    showFilter = false;
+    filter = false;
+    overlay = false;
 
     user = {
         id: this.$store.state.id,
         name: this.$store.state.last_name,
         role: this.$store.state.role
+    }
+
+    onFilter() {
+        this.filter = true;
+        this.overlay = true;
+    }
+
+    offFilter() {
+        this.filter = false;
+        this.overlay = false;
     }
 
     get breadcrumb () {
@@ -264,39 +285,70 @@ html{
         }
     }
 
-    .drawer{
+    .overlay{
         position: fixed;
         top: 0;
         bottom: 0;
         right: 0;
         left: 0;
         background-color: rgba(43, 43, 43, 0.3);
+        z-index: 1;
+    }
 
-        .main{
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            width: 20%;
-            background-color: #fff;
+    .drawer{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 20%;
+        background-color: #fff;
+        z-index: 2;
+        box-shadow: 0 0 5px 0 rgba(43, 43, 43, 0.1);
+
+        .header{
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            font-weight: 600;
+            border-bottom: 1px solid #e8e9eb;
+
+            i{
+                margin-right: 12px;
+                font-size: 20px;
+                color: #b7c0cd;
+            }
+        }
+
+        .header:hover > i{
+            cursor: pointer;
         }
     }
 
-    // .fade-enter-active, .fade-leave-active {
-    //     transition: opacity .3s;
-    // }
-    // .fade-enter, .fade-leave-to {
-    //     opacity: 0;
-    // }
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .3s;
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
 
-    .fade-enter-active {
+    .slide-fade-enter-active {
         transition: all .3s ease;
     }
-    .fade-leave-active {
-        transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    .slide-fade-leave-active {
+        transition: all .1s ease;
+
+        // transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
     }
-    .fade-enter, .fade-leave-to{
+    .slide-fade-enter, .slide-fade-leave-to{
         transform: translateX(20%);
+        opacity: 0;
+    }
+
+    .dropdown-enter-active, .dropdown-leave-active {
+        transition: all 0.3s;
+    }
+    .dropdown-enter, .dropdown-leave-to {
+        height: 100%;
         opacity: 0;
     }
 }

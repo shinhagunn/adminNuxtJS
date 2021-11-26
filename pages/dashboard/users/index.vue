@@ -1,5 +1,5 @@
 <template>
-  <LayoutAdmin :selected="selected" :pageName="pageName" class="page-users">
+  <LayoutAdmin :selected="selected" :pageName="pageName" :filters="filters" class="page-users">
     <button @click="filterTable('?state=active')">Ấn vào đây để lọc mẫu</button>
     <div class="main">
       <Block blockName="Table Users">
@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Align, Column, User, ModeTable } from '~/types'
+import { Align, Column, User, ModeTable, Filter, UserRole, UserState } from '~/types'
 
 @Component({
   middleware: ['check', 'notLogged'],
@@ -28,6 +28,19 @@ export default class Admin extends Vue {
       title: 'Users',
     }
   }
+
+  filters: Filter[] = [
+    {
+      type: UserRole,
+      title: 'Role',
+      transform: 'dropdown'
+    },
+    {
+      type: UserState,
+      title: 'State',
+      transform: 'dropdown'
+    }
+  ]
 
   columns: Column[] = [
     {

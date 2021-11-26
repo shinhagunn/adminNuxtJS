@@ -40,6 +40,12 @@ export interface Column {
     align?: Align;
 }
 
+export interface Filter {
+    type: any;
+    title: string;
+    transform: string;
+}
+
 export enum NotificationType {
     Success = 'success',
     Error = 'error',
