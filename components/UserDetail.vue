@@ -63,16 +63,14 @@
         </div>
       </div>
       <div class="col-3">
-        <div class="select" @mouseover="dropDownRole = true" @mouseleave="dropDownRole = false">
-          <a href="#" class="choose"  >{{role}}</a>
-          <transition name="dropdown">
-            <div v-if="dropDownRole" class="option">
-              <div v-for="item in userRole" :key="item" :data="item" class="child" @click="changeRole(item)">
-                {{ item }}
-              </div>
-            </div>
-          </transition>
-        </div>
+        <DropDown placement="bottomLeft">
+          Test
+          <template slot="overlay">
+            <div>Line 1</div>
+            <div>Line 2</div>
+            <div>Line 3</div>
+          </template>
+        </DropDown>
       </div>
     </div>
 
@@ -281,16 +279,19 @@ export default class UserDetail extends Vue {
 
       .option {
         position: absolute;
-        top: calc(100% + 2px);
-        left: 0;
-        right: 0;
+        opacity: 1;
         padding: 8px 0;
         // height: 0%;
         border: 1px solid rgba(43, 43, 43, 0.15);
-        box-shadow: 0 0 5px rgba(43, 43, 43, 0.15);
+        // box-shadow: 0 0 5px rgba(43, 43, 43, 0.15);
         border-radius: 4px;
         background-color: #fff;
         z-index: 1;
+        transform: translate(-100%, 0);
+        top: 100%;
+        left: 100%;
+        transition: all 0.3s;
+
         .child {
           border-bottom: none;
           padding: 8px;

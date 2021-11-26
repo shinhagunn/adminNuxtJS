@@ -345,11 +345,10 @@ html{
     }
 
     .dropdown-enter-active, .dropdown-leave-active {
-        transition: all 0.3s;
-    }
-    .dropdown-enter, .dropdown-leave-to {
-        height: 100%;
         opacity: 0;
+        left: 100%;
+        top: 50%;
+        transform: translateX(-100%);
     }
 }
 </style>
