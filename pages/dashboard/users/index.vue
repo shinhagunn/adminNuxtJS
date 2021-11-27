@@ -16,8 +16,9 @@
 </template>
 
 <script lang="ts">
+import { Context } from '@nuxt/types'
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Align, Column, User, ModeTable, Filter, UserRole, UserState } from '~/types'
+import { Align, Column, User, Filter, UserRole, UserState } from '~/types'
 
 @Component({
   middleware: ['check', 'notLogged'],
@@ -31,11 +32,15 @@ export default class Admin extends Vue {
 
   filters: Filter[] = [
     {
+      id: 1,
+      default: UserRole.Member,
       type: UserRole,
       title: 'Role',
       transform: 'dropdown'
     },
     {
+      id: 2,
+      default: UserState.Pending,
       type: UserState,
       title: 'State',
       transform: 'dropdown'
@@ -85,39 +90,50 @@ export default class Admin extends Vue {
   loading = true;
   selected: number = 2
   pageName: string = 'Users'
-  modeTable = ModeTable.Link
 
-  async filterTable(params: string) {
-    try {
-      const { data } = await this.$axios.get(`http://localhost:3000/api/v2/admin/users${params}`);
-
-      this.users = data;
-      this.loading = false;
-
-      this.users.forEach( (user) => {
-        const x = this.formatDateData(user.created_at);
-        user.created_at = x;
-      });
-    } catch (error) {
-      return error
+  get params() {
+    const url = this.$route.fullPath;
+    const position = url.indexOf('?');
+    if(position === -1) {
+      return ''
+    } else {
+      return url.slice(position);
     }
   }
 
-  async fetch() {
-    try {
-      const { data } = await this.$axios.get('http://localhost:3000/api/v2/admin/users');
+  asyncData ({ $axios }: Context) {
+    try{
+      return $axios.get(`http://localhost:3000/api/v2/admin/users`).then(res => {
+          // this.loading = false;
 
-      this.users = data;
-      this.loading = false;
-
-      this.users.forEach( (user) => {
-        const x = this.formatDateData(user.created_at);
-        user.created_at = x;
-      });
-    } catch (error) {
-      return error
+          res.data.forEach( (user:User) => {
+            const x = this.formatDateData(user.created_at);
+            user.created_at = x;
+          });
+          return {
+            users: res.data
+          }
+      })
+    } catch(error) {
+      return error;
     }
   }
+
+  // async fetch() {
+  //   try {
+  //     const { data } = await this.$axios.get(`http://localhost:3000/api/v2/admin/users${this.params}`);
+
+  //     this.users = data;
+  //     this.loading = false;
+
+  //     this.users.forEach( (user) => {
+  //       const x = this.formatDateData(user.created_at);
+  //       user.created_at = x;
+  //     });
+  //   } catch (error) {
+  //     return error
+  //   }
+  // }
 
   formatDateData(data:string) {
     return data.split('T')[0].split('-').join('/');

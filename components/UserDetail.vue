@@ -51,24 +51,22 @@
       </div>
 
       <div class="col-3">
-        <div class="select" @mouseover="dropDownState = true" @mouseleave="dropDownState = false">
-          <a href="#" class="choose">{{state}}</a>
-          <transition name="dropdown">
-            <div v-if="dropDownState" class="option">
-              <div v-for="item in userState" :key="item" :data="item" class="child" @click="changeState(item)">
+        <DropDown placement="bottomLeft">
+          {{state}}
+          <template slot="overlay">
+            <div v-for="item in userState" :key="item" @click="changeState(item)">
                 {{ item }}
               </div>
-            </div>
-          </transition>
-        </div>
+          </template>
+        </DropDown>
       </div>
       <div class="col-3">
         <DropDown placement="bottomLeft">
-          Test
+          {{role}}
           <template slot="overlay">
-            <div>Line 1</div>
-            <div>Line 2</div>
-            <div>Line 3</div>
+            <div v-for="item in userRole" :key="item" @click="changeRole(item)">
+                {{ item }}
+              </div>
           </template>
         </DropDown>
       </div>

@@ -57,23 +57,7 @@
             <slot></slot>
         </div>
 
-        <transition name="fade">
-            <div v-if="overlay" class="overlay" @click="offFilter">
-            </div>
-        </transition>
-
-        <transition name="slide-fade">
-            <div v-if="filter" class="drawer">
-                <div class="header">
-                    <i class="fas fa-times" @click="offFilter"></i>
-                    Filter data here
-                </div>
-                
-                <div class="content">
-                    
-                </div>
-            </div>
-        </transition>
+        <Drawer :isFilter="isFilter" :filters="filters" @onFadeFilter="offFilter"/>
     </div>
 </template>
 
@@ -94,8 +78,7 @@ export default class LayoutAdmin extends Vue{
 
     menuLogoes:string[] = [ '', 'fas fa-home', 'fas fa-user', 'fas fa-music', 'fas fa-chart-line'];
     logoNow = this.menuLogoes[this.selected];
-    filter = false;
-    overlay = false;
+    isFilter = false;
 
     user = {
         id: this.$store.state.id,
@@ -104,13 +87,11 @@ export default class LayoutAdmin extends Vue{
     }
 
     onFilter() {
-        this.filter = true;
-        this.overlay = true;
+        this.isFilter = true;
     }
 
     offFilter() {
-        this.filter = false;
-        this.overlay = false;
+        this.isFilter = false;
     }
 
     get breadcrumb () {
@@ -283,72 +264,6 @@ html{
                 }
             }
         }
-    }
-
-    .overlay{
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        background-color: rgba(43, 43, 43, 0.3);
-        z-index: 1;
-    }
-
-    .drawer{
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: 20%;
-        background-color: #fff;
-        z-index: 2;
-        box-shadow: 0 0 5px 0 rgba(43, 43, 43, 0.1);
-
-        .header{
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            font-weight: 600;
-            border-bottom: 1px solid #e8e9eb;
-
-            i{
-                margin-right: 12px;
-                font-size: 20px;
-                color: #b7c0cd;
-            }
-        }
-
-        .header:hover > i{
-            cursor: pointer;
-        }
-    }
-
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity .3s;
-    }
-    .fade-enter, .fade-leave-to {
-        opacity: 0;
-    }
-
-    .slide-fade-enter-active {
-        transition: all .3s ease;
-    }
-    .slide-fade-leave-active {
-        transition: all .1s ease;
-
-        // transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-    }
-    .slide-fade-enter, .slide-fade-leave-to{
-        transform: translateX(20%);
-        opacity: 0;
-    }
-
-    .dropdown-enter-active, .dropdown-leave-active {
-        opacity: 0;
-        left: 100%;
-        top: 50%;
-        transform: translateX(-100%);
     }
 }
 </style>

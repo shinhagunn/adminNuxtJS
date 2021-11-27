@@ -1,6 +1,6 @@
 <template>
   <LayoutAdmin :selected="selected" :pageName="pageName">
-    <LoadingAnim/>
+    <EmptyPage/>
   </LayoutAdmin>
 </template>
 

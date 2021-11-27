@@ -41,6 +41,8 @@ export interface Column {
 }
 
 export interface Filter {
+    id: number;
+    default: string;
     type: any;
     title: string;
     transform: string;

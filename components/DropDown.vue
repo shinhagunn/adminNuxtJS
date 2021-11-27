@@ -1,10 +1,10 @@
 <template>
-  <div class="dropdown" @mouseover="onTriggerHover" @mouseleave="onTriggerBlur">
-    <div class="z-dropdown-trigger">
+  <div class="dropdown" @click="onTriggerClick" @mouseleave="onTriggerOut">
+    <div class="dropdown-trigger">
       <slot />
     </div>
     <transition :name="`dropdown-${placement}`">
-      <div v-if="hover" :class="['dropdown-overlay', `dropdown-${placement}-overlay`]">
+      <div v-if="show" :class="['dropdown-overlay', `dropdown-${placement}-overlay`]" @click="onTriggerClick">
         <slot name="overlay" />
       </div>
     </transition>
@@ -16,28 +16,28 @@ import { Component, Prop, Vue } from "nuxt-property-decorator"
 
 @Component({})
 export default class DropDown extends Vue {
-  @Prop({ default: 'bottomCenter' }) readonly placement!: string;
+  @Prop({ default: 'bottomLeft' }) readonly placement!: string;
 
-  hover = false;
+  show = false;
   hoverQueue: NodeJS.Timeout | null = null;
 
-  onTriggerHover() {
+  onTriggerClick() {
     if (this.hoverQueue) {
       clearTimeout(this.hoverQueue)
     }
 
     this.hoverQueue = setTimeout(() => {
-      this.hover = true;
+      this.show = !this.show;
     }, 200)
   }
 
-  onTriggerBlur() {
+  onTriggerOut() {
     if (this.hoverQueue) {
       clearTimeout(this.hoverQueue)
     }
 
     this.hoverQueue = setTimeout(() => {
-      this.hover = false;
+      this.show = false;
     }, 200)
   }
 }
@@ -48,17 +48,50 @@ export default class DropDown extends Vue {
   position: relative;
 
   &-trigger {
-    height: 100%;
     z-index: 1;
+    width: 100%;
+    // height: 100%;
+    max-width: 200px;
+    padding: 8px;
+    height: 36px;
+    font-size: 16px;
+    color: #000;
+    text-decoration: none;
+    border: 1px solid rgba(43, 43, 43, 0.15);
+    border-radius: 4px;
+    border-collapse: collapse;
+  }
+
+  &-trigger::after{
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 5px;
   }
 
   &-overlay {
     opacity: 1;
     position: absolute;
     margin: 5px 0;
-    box-shadow: 0 1px 6px 0 hsl(0deg 0% 100% / 10%);
-    transition: all 0.3s;
+    padding: 8px 0;
+    max-width: 200px;
+    border: 1px solid rgba(43, 43, 43, 0.15);
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(43, 43, 43, 0.15);
+    transition: all 0.1s;
     z-index: 999;
+
+    > div {
+      padding: 8px;
+    }
+
+    > div:hover {
+      cursor: pointer;
+      background-color: #f8f9fa;
+    }
   }
 
   &-bottomLeft {
@@ -66,6 +99,7 @@ export default class DropDown extends Vue {
       transform: translate(0, 0);
       top: 100%;
       left: 0;
+      right: 0;
     }
 
     &-enter,
