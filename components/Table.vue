@@ -11,8 +11,7 @@
     </div>
 
     <div class="a-table-content">
-      <LoadingAnim v-if="loading" />
-      <EmptyPage v-else-if="data.length === 0" />
+      <!-- <EmptyPage v-if="data.length === 0" /> -->
       <TableRow
         v-for="(row, index) in data"
         :key="index"

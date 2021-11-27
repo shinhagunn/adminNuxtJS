@@ -25,7 +25,7 @@
                   </DropDown>
                 </div>
 
-                <button class="drawer-btn"><nuxt-link :to="url">Filter</nuxt-link></button>
+                <a :href="url" class="drawer-btn">Filter</a>
             </div>
 
         </div>
@@ -46,6 +46,10 @@ export default class MyClass extends Vue {
 
   onFadeFilter(){
     this.$emit('onFadeFilter');
+  }
+
+  filterTest(){
+    this.$router.replace(this.url)
   }
 }
 </script>

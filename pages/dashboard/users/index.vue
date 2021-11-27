@@ -8,7 +8,6 @@
           :columns="columns"
           :is-router-link="true"
           :router-builder="'/dashboard/users/#{uid}'"
-          :loading="loading"
         />
       </Block>
     </div>
@@ -19,6 +18,15 @@
 import { Context } from '@nuxt/types'
 import { Component, Vue } from 'nuxt-property-decorator'
 import { Align, Column, User, Filter, UserRole, UserState } from '~/types'
+
+function test(url: string) {
+  const position = url.indexOf('?');
+  if(position === -1) {
+    return ''
+  } else {
+    return url.slice(position);
+  }
+}
 
 @Component({
   middleware: ['check', 'notLogged'],
@@ -33,14 +41,14 @@ export default class Admin extends Vue {
   filters: Filter[] = [
     {
       id: 1,
-      default: UserRole.Member,
+      default: '',
       type: UserRole,
       title: 'Role',
       transform: 'dropdown'
     },
     {
       id: 2,
-      default: UserState.Pending,
+      default: '',
       type: UserState,
       title: 'State',
       transform: 'dropdown'
@@ -87,7 +95,6 @@ export default class Admin extends Vue {
 
   users: User[] = []
 
-  loading = true;
   selected: number = 2
   pageName: string = 'Users'
 
@@ -101,19 +108,21 @@ export default class Admin extends Vue {
     }
   }
 
-  asyncData ({ $axios }: Context) {
-    try{
-      return $axios.get(`http://localhost:3000/api/v2/admin/users`).then(res => {
-          // this.loading = false;
+  beforeRouteUpdate(){
+    console.log(this.$route);
+  }
 
-          res.data.forEach( (user:User) => {
-            const x = this.formatDateData(user.created_at);
-            user.created_at = x;
-          });
-          return {
-            users: res.data
-          }
-      })
+  async asyncData ({ $axios, route }: Context) {
+    try{
+      const { data } = await $axios.get(`http://localhost:3000/api/v2/admin/users${test(route.fullPath)}`);
+
+      // data.forEach( (user:User) => {
+      //   const x = this.formatDateData(user.created_at);
+      //   user.created_at = x;
+      // });
+      return {
+        users: data
+      }
     } catch(error) {
       return error;
     }
