@@ -12,7 +12,7 @@ export default {}
 <style lang='less'>
 .loading-comp{
   position: absolute;
-  top: 0;
+  top: 20px;
   right: 0;
   left: 15%;
   bottom: 0;

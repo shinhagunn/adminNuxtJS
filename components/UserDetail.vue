@@ -154,7 +154,9 @@ export default class UserDetail extends Vue {
 
   onFileChange(e: any) {
     this.avatar = e.target.files[0];
-    this.url = URL.createObjectURL(this.avatar);
+    if(e.target.files[0] !== undefined){
+      this.url = URL.createObjectURL(this.avatar);
+    }
   }
 
   async updateUser() {

@@ -34,7 +34,7 @@
 
         <div class="content">
             <header class="header-top">
-                <div class="filter" @click="onFilter">
+                <div v-if="drawer" class="filter" @click="onFilter">
                     <i class="fas fa-filter"></i>
                 </div>
             </header>
@@ -57,7 +57,7 @@
             <slot></slot>
         </div>
 
-        <Drawer :isFilter="isFilter" :filters="filters" @onFadeFilter="offFilter"/>
+        <Drawer v-if="drawer" :isFilter="isFilter" :filters="filters" @onFadeFilter="offFilter"/>
     </div>
 </template>
 
@@ -75,6 +75,7 @@ export default class LayoutAdmin extends Vue{
     @Prop() readonly selected!: number;
     @Prop() readonly pageName!: string;
     @Prop() readonly filters!: Filter;
+    @Prop() readonly drawer!: Boolean;
 
     menuLogoes:string[] = [ '', 'fas fa-home', 'fas fa-user', 'fas fa-music', 'fas fa-chart-line'];
     logoNow = this.menuLogoes[this.selected];

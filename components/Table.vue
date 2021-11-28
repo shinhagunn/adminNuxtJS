@@ -11,7 +11,7 @@
     </div>
 
     <div class="a-table-content">
-      <!-- <EmptyPage v-if="data.length === 0" /> -->
+      <EmptyPage v-if="data.length === 0" />
       <TableRow
         v-for="(row, index) in data"
         :key="index"
@@ -40,7 +40,6 @@ export default class Table extends Vue {
   @Prop() readonly columns!: Column[]
   @Prop() readonly isRouterLink!: boolean
   @Prop() readonly routerBuilder!: string
-  @Prop() readonly loading!: boolean
 
   urlCurrent = this.$route.path
 

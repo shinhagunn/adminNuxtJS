@@ -13,21 +13,25 @@
             </div>
             
             <div class="drawer-main-content">
-                <div v-for="filter in filters" :key="filter.id" class="drawer-main-item">
-                  <p class="drawer-main-item-title">{{filter.title}}</p>
-                  <DropDown v-if="filter.trasform = 'dropdown'" placement="bottomLeft">
-                    {{filter.default}}
-                    <template slot="overlay">
-                      <div v-for="item in filter.type" :key="item.id" @click="filter.default = item">
-                          {{ item }}
-                        </div>
-                    </template>
-                  </DropDown>
-                </div>
+              <div v-for="(filter, index) in filters" :key="filter.id" class="drawer-main-item">
+                <p class="drawer-main-item-title">{{filter.title}}</p>
+                <DropDown v-if="filter.trasform = 'dropdown'" placement="bottomLeft" @updateData="updateData">
+                  <span>{{values[index]}}</span>
+                  <template slot="overlay">
+                    <div v-for="item in filter.type" :key="item.id" :type="filter.title" @click="handleData($event, filter.id)"> 
+                        {{ item }}
+                      </div>
+                  </template>
+                </DropDown>
+              </div>
 
-                <a :href="url" class="drawer-btn">Filter</a>
+              <div class="drawer-main-btns">
+                <a v-if="data.length == 0" class="drawer-btn-unactive" >Filter</a>
+                <a v-else :href="url" class="drawer-btn" >Filter</a>
+                <button class="drawer-btn" @click="resetValues">Reset</button>
+              </div>
+
             </div>
-
         </div>
     </transition>
   </div>
@@ -42,7 +46,19 @@ export default class MyClass extends Vue {
   @Prop() readonly isFilter!: boolean;
   @Prop() readonly filters!: Filter[];
 
-  url = this.$route.path + '?state=active';
+  url:string = '';
+  
+  values:string[] = this.createValues();
+
+  createValues(){
+    const result: string[] = [];
+    this.filters.forEach( () => {
+    result.push('');
+    } );
+    return result;
+  }
+
+  data: string[] = [];
 
   onFadeFilter(){
     this.$emit('onFadeFilter');
@@ -50,6 +66,39 @@ export default class MyClass extends Vue {
 
   filterTest(){
     this.$router.replace(this.url)
+  }
+
+  handleData(e: any, id: number){
+    const index = this.filters.findIndex((filter) => {
+      return filter.id === id;
+    });
+
+    const value = `${e.target.getAttribute('type')}=${e.target.innerText}`;
+    const exist = this.data.findIndex(x => {
+      return x.search(e.target.getAttribute('type')) !== -1;
+    })
+    if(exist === -1) {
+      this.addData(value)
+    } else {
+      this.updateData(value, exist);
+    }
+    
+    this.values[index] = e.target.innerText;
+
+    this.url = this.$route.path + '?' + this.data.join('&')
+  }
+
+  addData(value:string){
+    this.data.push(value);
+  }
+
+  updateData(value:string, index:number){
+    this.data[index] = value;
+  }
+
+  resetValues(){
+    this.values = this.createValues();
+    this.data = [];
   }
 }
 </script>
@@ -93,24 +142,53 @@ export default class MyClass extends Vue {
     &-header:hover > i{
         cursor: pointer;
     }
+
+    &-content{
+      margin-top: 8px;
+      padding: 12px;
+    }
+
+    &-item{
+      margin-bottom: 16px;
+    }
+
+    &-btns{
+      position: absolute;
+      right: 0;
+      left: 0;
+      bottom: 16px;
+      display: flex;
+      justify-content: space-around;
+    }
   }
 
   &-btn{
-    position: absolute;
-    left: 50%;
-    bottom: 16px;
-    transform: translateX(-50%);
     cursor: pointer;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-width: 100px;
     height: 30px;
     background-color: #007bff;
     border: 1px solid #007bff;
     border-radius: 3px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
 
-    > a {
+    &-unactive{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 100px;
+      height: 30px;
+      border-radius: 3px;
       text-decoration: none;
       color: #fff;
+      font-size: 14px;
+      background-color: gray;
+      border: 1px solid gray;
+      cursor: auto;
     }
   }
 }

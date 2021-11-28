@@ -1,6 +1,5 @@
 <template>
-  <LayoutAdmin :selected="selected" :pageName="pageName" :filters="filters" class="page-users">
-    <button @click="filterTable('?state=active')">Ấn vào đây để lọc mẫu</button>
+  <LayoutAdmin :selected="selected" :pageName="pageName" :drawer="true" :filters="filters" class="page-users">
     <div class="main">
       <Block blockName="Table Users">
         <Table
@@ -19,7 +18,7 @@ import { Context } from '@nuxt/types'
 import { Component, Vue } from 'nuxt-property-decorator'
 import { Align, Column, User, Filter, UserRole, UserState } from '~/types'
 
-function test(url: string) {
+function handleUrl(url: string) {
   const position = url.indexOf('?');
   if(position === -1) {
     return ''
@@ -108,18 +107,14 @@ export default class Admin extends Vue {
     }
   }
 
-  beforeRouteUpdate(){
-    console.log(this.$route);
-  }
-
   async asyncData ({ $axios, route }: Context) {
     try{
-      const { data } = await $axios.get(`http://localhost:3000/api/v2/admin/users${test(route.fullPath)}`);
+      const { data } = await $axios.get(`http://localhost:3000/api/v2/admin/users${handleUrl(route.fullPath)}`);
 
-      // data.forEach( (user:User) => {
-      //   const x = this.formatDateData(user.created_at);
-      //   user.created_at = x;
-      // });
+      data.forEach( (user:User) => {
+        const x = user.created_at.split('T')[0].split('-').join('/');
+        user.created_at = x;
+      });
       return {
         users: data
       }
