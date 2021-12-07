@@ -14,4 +14,4 @@ RUN yarn run build
 
 EXPOSE 3000
 
-RUN yarn run start
+CMD yarn run start
