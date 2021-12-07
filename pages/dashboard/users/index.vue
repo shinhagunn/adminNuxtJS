@@ -1,13 +1,17 @@
 <template>
   <LayoutAdmin :selected="selected" :pageName="pageName" :drawer="true" :filters="filters" class="page-users">
     <div class="main">
-      <Block blockName="Table Users">
+      <Block class="users" blockName="Table Users" >
         <Table
           :data="users"
           :columns="columns"
           :is-router-link="true"
           :router-builder="'/dashboard/users/#{uid}'"
-        />
+          :onPagination="onPagination" 
+          :quantityRowPerPage="quantityRowPerPage" 
+        >
+          <!-- <Pagination v-if="onPagination" :quantityRowPerPage="quantityRowPerPage" :dataLength="users.length"/> -->
+        </Table>
       </Block>
     </div>
   </LayoutAdmin>
@@ -41,16 +45,28 @@ export default class Admin extends Vue {
     {
       id: 1,
       default: '',
+      title: 'UID',
+      transform: 'text'
+    },
+    {
+      id: 2,
+      default: '',
       type: UserRole,
       title: 'Role',
       transform: 'dropdown'
     },
     {
-      id: 2,
+      id: 3,
       default: '',
       type: UserState,
       title: 'State',
       transform: 'dropdown'
+    },
+    {
+      id: 4,
+      default: '',
+      title: 'Email',
+      transform: 'text'
     }
   ]
 
@@ -76,6 +92,11 @@ export default class Admin extends Vue {
       align: Align.Left,
     },
     {
+      key: 'uid',
+      title: 'UID',
+      align: Align.Left,
+    },
+    {
       key: 'state',
       title: 'State',
       align: Align.Left,
@@ -88,7 +109,7 @@ export default class Admin extends Vue {
     {
       key: 'created_at',
       title: 'Created At',
-      align: Align.Left,
+      align: Align.Right,
     },
   ]
 
@@ -96,6 +117,8 @@ export default class Admin extends Vue {
 
   selected: number = 2
   pageName: string = 'Users'
+  onPagination = false;
+  quantityRowPerPage = 5;
 
   get params() {
     const url = this.$route.fullPath;
@@ -123,22 +146,6 @@ export default class Admin extends Vue {
     }
   }
 
-  // async fetch() {
-  //   try {
-  //     const { data } = await this.$axios.get(`http://localhost:3000/api/v2/admin/users${this.params}`);
-
-  //     this.users = data;
-  //     this.loading = false;
-
-  //     this.users.forEach( (user) => {
-  //       const x = this.formatDateData(user.created_at);
-  //       user.created_at = x;
-  //     });
-  //   } catch (error) {
-  //     return error
-  //   }
-  // }
-
   formatDateData(data:string) {
     return data.split('T')[0].split('-').join('/');
   }
@@ -146,31 +153,37 @@ export default class Admin extends Vue {
 </script>
 
 <style lang="less">
-.id{
-  min-width: 80px;
-}
+.users {
+  .id {
+    flex: 0 0 80px;
+  }
+  
+  .first_name {
+    flex: 0 0 120px;
+  }
+  
+  .last_name {
+    flex: 0 0 120px;
+  }
+  
+  .email {
+    min-width: 350px;
+  }
 
-.first_name{
-  min-width: 120px;
-}
-
-.last_name{
-  min-width: 120px;
-}
-
-.email{
-  min-width: 350px;
-}
-
-.state{
-  flex: 1;
-}
-
-.role{
-  flex: 1;
-}
-
-.created_at{
-  flex: 1;
+  .uid {
+    flex: 1.5;
+  }
+  
+  .state {
+    flex: 1;
+  }
+  
+  .role {
+    flex: 1;
+  }
+  
+  .created_at {
+    flex: 1;
+  }
 }
 </style>

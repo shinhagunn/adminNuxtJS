@@ -23,10 +23,14 @@
           :key="col.key"
           :class="[col.key, col.class, 'item', `text-${col.align || 'left'}`]"
         >
-          {{ row[col.key] }}
+          <RemoveAction v-if="col.key == 'action-remove'" @handleActionRemove="handleActionRemove(row.id)"/>
+          <AddAction v-else-if="col.key == 'action-add'" @handleActionAdd="handleActionAdd(row.id)"/>
+          <span v-else>{{ row[col.key] }}</span>
         </span>
       </TableRow>
     </div>
+
+    
   </div>
 </template>
 
@@ -107,6 +111,14 @@ export default class Table extends Vue {
 
     return value
   }
+
+  handleActionRemove(id: number){
+    this.$emit('handleActionRemove', id);
+  }
+
+  handleActionAdd(id: number){
+    this.$emit('handleActionAdd', id);
+  }
 }
 </script>
 
@@ -122,8 +134,8 @@ export default class Table extends Vue {
     align-items: center;
 
     > a,
-    span {
-      // flex: 1;
+    > span {
+      flex: 1;
       padding: 16px;
     }
   }
@@ -145,6 +157,15 @@ export default class Table extends Vue {
 
   &-content {
     position: relative;
+    min-height: 250px;
+  }
+}
+
+.scroll-height{
+  .a-table-content {
+    height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 </style>

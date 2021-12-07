@@ -48,6 +48,7 @@ export default class DropDown extends Vue {
   position: relative;
 
   &-trigger {
+    cursor: pointer;
     z-index: 1;
     width: 100%;
     // height: 100%;
@@ -60,6 +61,7 @@ export default class DropDown extends Vue {
     border: 1px solid rgba(43, 43, 43, 0.15);
     border-radius: 4px;
     border-collapse: collapse;
+    transition: all 0.3s;
   }
 
   &-trigger::after{
@@ -69,6 +71,10 @@ export default class DropDown extends Vue {
     left: 0;
     right: 0;
     height: 5px;
+  }
+
+  &:hover > &-trigger{
+    border: 1px solid #007bff;
   }
 
   &-overlay {

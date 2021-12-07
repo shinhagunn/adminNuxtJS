@@ -38,35 +38,3 @@
 <script>
 export default {}
 </script>
-
-<style lang='less'>
-.loading-comp{
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 15%;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  .loader {
-    height: 100px;
-    width: 20%;
-    text-align: center;
-    padding: 1em;
-    margin: 0 auto 1em;
-    display: inline-block;
-    vertical-align: top;
-  }
-  
-  /*
-      Set the color of the icon
-      */
-  svg path,
-  svg rect {
-    fill: #ff6700;
-  }
-}
-
-</style>

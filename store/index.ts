@@ -10,8 +10,10 @@ export const state = () => ({
     role: null,
     bio: null,
     created_at: null,
-    updated_at: null
-  })
+    updated_at: null,
+    getLogged: false,
+    isReload: true
+})
   
 export const mutations = {
     setId(state: User, id: number){
@@ -52,5 +54,13 @@ export const mutations = {
 
     setUpdatedAt(state: User, updated_at: string){
         state.updated_at = updated_at; 
+    },
+
+    setLogged(state: any, value: Boolean){
+        state.getLogged = value; 
+    },
+
+    setReload(state: any, value: Boolean){
+        state.isReload = value; 
     },
 }

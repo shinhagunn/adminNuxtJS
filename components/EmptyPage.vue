@@ -1,7 +1,8 @@
 <template>
   <!-- 2 -->
   <div class="loading-comp">
-    <h2 class="empty">Empty Page</h2>
+    <h2 class="empty">Empty 
+    </h2>
   </div>
 </template>
 
@@ -13,9 +14,9 @@ export default {}
 .loading-comp{
   position: absolute;
   top: 20px;
-  right: 0;
-  left: 15%;
+  left: 50%;
   bottom: 0;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   justify-content: center;

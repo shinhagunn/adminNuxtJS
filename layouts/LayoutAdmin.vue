@@ -14,22 +14,28 @@
                     
                 </li>
                 <li :class="['item', {'item-selected': (selected == 3)}]">
-                    <a href="">
+                    <nuxt-link to="/dashboard/musics">
                         <i class="fas fa-music"></i>
                         Musics
-                    </a>
+                    </nuxt-link>
                 </li>
                 <li :class="['item', {'item-selected': (selected == 4)}]">
-                    <a href="">
-                        <i class="fas fa-chart-line"></i>
-                        Statistic
-                    </a>
+                    <nuxt-link to="/dashboard/comments">
+                        <i class="fas fa-comment"></i>
+                        Comments
+                    </nuxt-link>
+                </li>
+                <li :class="['item', {'item-selected': (selected == 5)}]">
+                    <nuxt-link to="/dashboard/albums">
+                        <i class="fas fa-compact-disc"></i>
+                        Albums
+                    </nuxt-link>
                 </li>
             </ul>
-            <nuxt-link to="/" class="logout">
+            <button to="/" class="logout" @click="handleLogOut">
                 <i class="fas fa-undo-alt"></i>
                 Logout
-            </nuxt-link>
+            </button>
         </nav>
 
         <div class="content">
@@ -63,6 +69,8 @@
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import ZNotification from "@/library/z-notification"
+import ApiClient from '~/library/ApiClient';
 import { Filter } from '~/types';
 
 interface breadcrumb {
@@ -77,7 +85,7 @@ export default class LayoutAdmin extends Vue{
     @Prop() readonly filters!: Filter;
     @Prop() readonly drawer!: Boolean;
 
-    menuLogoes:string[] = [ '', 'fas fa-home', 'fas fa-user', 'fas fa-music', 'fas fa-chart-line'];
+    menuLogoes:string[] = [ '', 'fas fa-home', 'fas fa-user', 'fas fa-music', 'fas fa-comment', 'fas fa-compact-disc' , 'fas fa-chart-line'];
     logoNow = this.menuLogoes[this.selected];
     isFilter = false;
 
@@ -85,14 +93,6 @@ export default class LayoutAdmin extends Vue{
         id: this.$store.state.id,
         name: this.$store.state.last_name,
         role: this.$store.state.role
-    }
-
-    onFilter() {
-        this.isFilter = true;
-    }
-
-    offFilter() {
-        this.isFilter = false;
     }
 
     get breadcrumb () {
@@ -129,12 +129,48 @@ export default class LayoutAdmin extends Vue{
                 }
             }else {
                 result[i] = {
-                    name: 'Home / ',
+                    name: 'Dashboard / ',
                     url: tam[i]
                 }
             }
         }
         return result;
+    }
+
+
+    onFilter() {
+        this.isFilter = true;
+    }
+
+    offFilter() {
+        this.isFilter = false;
+    }
+
+    async handleLogOut() {
+        try {
+            await new ApiClient().delete('identity/session');
+            this.$store.commit('setId', null);
+            this.$store.commit('setUid', null);
+            this.$store.commit('setFirstname', null);
+            this.$store.commit('setLastname', null);
+            this.$store.commit('setState', null);
+            this.$store.commit('setEmail', null);
+            this.$store.commit('setRole', null);
+            this.$store.commit('setBio', null);
+            this.$store.commit('setCreatedAt', null);
+            this.$store.commit('setUpdatedAt', null);
+            this.$store.commit('setLogged', false);
+            this.$store.commit('setReload', false);
+
+            ZNotification.success({
+                title: "Success",
+                description: "Logout successfully"
+            })
+
+            this.$router.push('/dashboard/login');
+        } catch (error) {
+            return error;
+        }
     }
 }
 </script>
@@ -168,9 +204,14 @@ html{
         }
 
         .logout{
+            cursor: pointer;
+            display: inline-block;
+            background-color: #263544;
             position: absolute;
             bottom: 16px;
             left: 16px;
+            border: none;
+            font-size: 16px;
             text-decoration: none;
             color: #b7c0cd;
         }

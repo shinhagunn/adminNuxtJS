@@ -13,22 +13,25 @@
             </div>
             
             <div class="drawer-main-content">
-              <div v-for="(filter, index) in filters" :key="filter.id" class="drawer-main-item">
+              <div v-for="filter in filters" :key="filter.id" class="drawer-main-item">
                 <p class="drawer-main-item-title">{{filter.title}}</p>
-                <DropDown v-if="filter.trasform = 'dropdown'" placement="bottomLeft" @updateData="updateData">
-                  <span>{{values[index]}}</span>
+                <DropDown v-if="filter.transform == 'dropdown'" placement="bottomLeft" @updateData="updateData">
+                  <span>{{values[filter.title.toLowerCase()]}}</span>
                   <template slot="overlay">
-                    <div v-for="item in filter.type" :key="item.id" :type="filter.title" @click="handleData($event, filter.id)"> 
+                    <div v-for="item in filter.type" :key="item.id" @click="handleDataDropDown($event, filter.title.toLowerCase())"> 
                         {{ item }}
                       </div>
                   </template>
                 </DropDown>
+                <filter-text v-if="filter.transform == 'text'" >
+                  <input class="filter-text-input" type="text" :value="values[filter.title.toLowerCase()]" @change="handleDataText($event, filter.title.toLowerCase())">
+                </filter-text>
               </div>
 
               <div class="drawer-main-btns">
                 <a v-if="data.length == 0" class="drawer-btn-unactive" >Filter</a>
                 <a v-else :href="url" class="drawer-btn" >Filter</a>
-                <button class="drawer-btn" @click="resetValues">Reset</button>
+                <a :href="$route.path" class="drawer-btn" @click="resetValues">Reset</a>
               </div>
 
             </div>
@@ -48,17 +51,19 @@ export default class MyClass extends Vue {
 
   url:string = '';
   
-  values:string[] = this.createValues();
+  values = this.createValues();
 
   createValues(){
-    const result: string[] = [];
-    this.filters.forEach( () => {
-    result.push('');
-    } );
+    const result: {[key: string]: string} = {};
+    const query = this.$route.query as any;
+    for(const param in query) {
+      result[param] = query[param];
+    }
+
     return result;
   }
 
-  data: string[] = [];
+  data: string[] = this.getParamsFromUrl(this.$route.fullPath).split('&');
 
   onFadeFilter(){
     this.$emit('onFadeFilter');
@@ -68,14 +73,10 @@ export default class MyClass extends Vue {
     this.$router.replace(this.url)
   }
 
-  handleData(e: any, id: number){
-    const index = this.filters.findIndex((filter) => {
-      return filter.id === id;
-    });
-
-    const value = `${e.target.getAttribute('type')}=${e.target.innerText}`;
+  handleDataDropDown(e: any, title:string){
+    const value = `${title}=${e.target.innerText}`;
     const exist = this.data.findIndex(x => {
-      return x.search(e.target.getAttribute('type')) !== -1;
+      return x.search(title) !== -1;
     })
     if(exist === -1) {
       this.addData(value)
@@ -83,9 +84,31 @@ export default class MyClass extends Vue {
       this.updateData(value, exist);
     }
     
-    this.values[index] = e.target.innerText;
+    this.values[title] = e.target.innerText;
 
     this.url = this.$route.path + '?' + this.data.join('&')
+  }
+
+  handleDataText(e: any, title:string){
+    const value = `${title}=${e.target.value}`;
+
+    const exist = this.data.findIndex(x => {
+      return x.search(title) !== -1;
+    })
+
+    if(exist === -1) {
+      this.addData(value)
+    } else {
+      this.updateData(value, exist);
+    }
+
+    if(e.target.value === '') {
+      this.data.splice(exist, 1); 
+    }
+
+    this.values[title] = e.target.value;
+
+    this.url = this.$route.path + '?' + this.data.join('&') 
   }
 
   addData(value:string){
@@ -99,6 +122,15 @@ export default class MyClass extends Vue {
   resetValues(){
     this.values = this.createValues();
     this.data = [];
+  }
+
+  getParamsFromUrl(url: string) {
+    const position = url.indexOf('?');
+    if(position === -1) {
+      return ''
+    } else {
+      return url.slice(position + 1);
+    }
   }
 }
 </script>

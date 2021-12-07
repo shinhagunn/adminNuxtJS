@@ -15,22 +15,36 @@ export default class Table extends Vue {
 </script>
 
 <style lang="less">
-.content-block{
-    margin: 34px;
+.content-block {
+    // position: relative;
+    margin: 20px 34px;
     padding: 16px;
     background-color: #fff;
     border-radius: 3px;
     box-shadow: 0 0 5px 0 rgba(43, 43, 43, 0.15);
 
-    h2{
+    h2 {
       font-size: 16px;
     }
 
-    .underline{
+    .underline {
       display: block;
       margin: 16px 0;
       width: 100px;
       border: 1px solid #212529;
     }
+
+    &.pb-none {
+      padding-bottom: 4px;
+    }
+
+  &.table-album-music{
+    margin: 0;
+    box-shadow: none;
+  }
+
+  &.table-album-music + &.table-album-music{
+    border-left: 1px solid rgba(43, 43, 43, 0.15);
+  }
 }
 </style>

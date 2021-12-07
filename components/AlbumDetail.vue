@@ -1,83 +1,45 @@
 <template>
-  <div class="container-user">
+  <div class="container-album">
     <div class="row">
       <div class="col-6">
-        <p class="email">{{ user.email }}</p>
+        <input v-model="name" class="music-item name" type="text" title="Click here to change">
         <p class="updated-at">
-          Last updated: {{ formatDateData(user.updated_at) }}
+          Last updated: {{ formatDateData(album.updated_at) }}
         </p>
       </div>
       <div class="col-6">
-        <div class="row">
-          <div class="col-6">
-            <span class="title">First Name</span>
+        <div class="row flex-right">
+          <div class="col-4 ">
+            <span class="title">User UID</span>
           </div>
-          <div class="col-6">
-            <span class="title">Last Name</span>
+          <div class="col-4">
+            <span class="title">View Count</span>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-6">
-            <input v-model="first_name" class="music-item input-change" type="text" title="Click here to change">
-          </div>
-          <div class="col-6">
-            <input v-model="last_name" class="music-item input-change" type="text" title="Click here to change">
+          <div class="col-4  text-right">
+            <span class="title">Created At</span>
           </div>
         </div>
+        <div class="row flex-right">
+          <div class="col-4">
+            <p class="music-infor">{{album.user_uid}}</p>
+          </div>
+          <div class="col-4">
+            <p class="music-infor">{{album.view_count}}</p>
+          </div>
+          <div class="col-4  text-right">
+            <p class="music-infor">{{album.created_at}}</p>
+          </div>
+          
+        </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-3">
-        <span class="title">UID</span>
-      </div>
-      <div class="col-3">
-        <span class="title">Created At</span>
-      </div>
-      <div class="col-3">
-        <span class="title">State</span>
-      </div>
-      <div class="col-3">
-        <span class="title">Role</span>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-3">
-        <p class="user-infor">{{ user.uid }}</p>
-      </div>
-
-      <div class="col-3">
-        <p class="user-infor">{{ formatDateData(user.created_at) }}</p>
-      </div>
-
-      <div class="col-3">
-        <DropDown placement="bottomLeft">
-          {{state}}
-          <template slot="overlay">
-            <div v-for="item in userState" :key="item" @click="changeState(item)">
-                {{ item }}
-              </div>
-          </template>
-        </DropDown>
-      </div>
-      <div class="col-3">
-        <DropDown placement="bottomLeft">
-          {{role}}
-          <template slot="overlay">
-            <div v-for="item in userRole" :key="item" @click="changeRole(item)">
-                {{ item }}
-              </div>
-          </template>
-        </DropDown>
-      </div>
-    </div>
-
-    <div class="row">
       <div class="row row-column">
-        <p class="title">Avatar</p>
+        <p class="title">Image</p>
         <label id="imagePre" for="upFile">
-          <img  id="preview"  :src="url" />
+          <img class="image-music" id="preview"  :src="url" />
           <div class="overlay">
             <i class="fas fa-upload text"></i>
           </div>
@@ -88,13 +50,14 @@
       </div>
 
       <div class="row bio">
-        <p class="title">About me</p>
-        <textarea v-model="bio" class="bio"></textarea>
+        <p class="title">Description</p>
+        <textarea v-model="description" class="bio"></textarea>
       </div>
     </div>
 
     <div class="row end">
-      <button class="btn" @click="updateUser" >Update</button>
+      <button class="btn btn-error" @click="removeAlbum" >Remove</button>
+      <button class="btn" @click="updateAlbum">Update</button>
     </div>
   </div>
 </template>
@@ -103,81 +66,42 @@
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import ZNotification from "@/library/z-notification"
 import ApiClient from '~/library/ApiClient';
-import { UserState, UserRole} from '~/types'
 @Component({
   middleware: ['check', 'notLogged'],
 })
-export default class UserDetail extends Vue {
-  @Prop() readonly user!: any
+export default class AlbumDetail extends Vue {
+  @Prop() readonly album!: any
 
-  url = `https://learn.huuhait.me/api/v2/public/users/${this.user.uid}/avatar`;
-  first_name = this.user.first_name;
-  last_name = this.user.last_name;
-  state = this.user.state;
-  role = this.user.role;
-  bio = this.user.bio;
+  name = this.album.name;
+  description = this.album.description;
+  url = `https://learn.huuhait.me/api/v2/public/albums/${this.album.id}/image`;
   avatar:any;
-  isUpImage = false;
-  dropDownRole = false;
-  dropDownState = false;
-
-  get userState() {
-    const result = []
-
-    for (const value in UserState) {
-      result.push(value.toLowerCase())
-    }
-
-    return result
-  }
-
-  get userRole() {
-    const result = []
-
-    for (const value in UserRole) {
-      result.push(value.toLowerCase())
-    }
-
-    return result
-  }
-
-  changeState(state: UserState){
-    this.state = state;
-  }
-
-  changeRole(role: UserRole){
-    this.role = role;
-  }
 
   formatDateData(data:string) {
     return data.split('T')[0].split('-').join('/');
   }
 
+  updateAlbum() {
+    this.$emit("updateAlbum", this.name, this.description, this.avatar);
+  }
+
   onFileChange(e: any) {
     this.avatar = e.target.files[0];
-    // console.log(this.avatar);
     if(e.target.files[0] !== undefined){
       this.url = URL.createObjectURL(this.avatar);
     }
   }
 
-  async updateUser() {
-    const data = new FormData();
-    data.set('first_name', this.first_name);
-    data.set('last_name', this.last_name);
-    data.set('state', this.state);
-    data.set('role', this.role);
-    data.set('bio', this.bio);
-    data.set('avatar', this.avatar as File);
+  async removeAlbum(){
     try {
-      await new ApiClient().put(`admin/users/${this.user.uid}`, data);
+      await new ApiClient().delete(`admin/albums/${this.album.id}`);
 
       ZNotification.success({
           title: "Success",
-          description: "User update successfully"
+          description: "Remove album successfully"
       })
-
-      this.$router.push('/dashboard/users');
+      
+      this.$router.push('/dashboard/albums');
     } catch (error) {
       return error;
     }
@@ -186,49 +110,71 @@ export default class UserDetail extends Vue {
 </script>
 
 <style lang="less">
-.container-user {
+.container-album {
   .row {
     display: flex;
     margin-top: 8px;
 
-    &-column{
-      flex-direction: column;
-      align-items: flex-start;
+    a{
+      text-decoration: none;
+      color: #000;
+      transition: all 0.3s;
+
+      &:hover{
+        color:#007bff;
+      }
     }
 
-    &.bio{
-      margin-left: 32px;
+    .flex-right{
+      justify-content: flex-end;
+    }
+
+    .text-right{
+      text-align: right;
+    }
+
+    &-column {
       flex-direction: column;
       align-items: flex-start;
+      margin-right: 32px;
+
+      .file-music {
+        margin-top: 16px;
+      }
+    }
+
+    &.bio {
+      margin-left: 32px;
+      flex-direction: column;
+      align-items: flex-end;
       position: relative;
       flex: 1;
 
-      .bio{
+      .bio {
         margin-top: 16px;
         padding: 16px;
-        width: 100%;
+        width: 70%;
         height: 200px;
         font-size: 14px;
         border: 1px solid rgba(43, 43, 43, 0.15);
       }
 
-      .bio:focus{
+      .bio:focus {
         outline: none;
       }
     }
 
     &.end {
-      justify-content: flex-end;
+      justify-content: space-between;
     }
 
-    .email {
+    .name {
       padding-bottom: 4px;
       font-size: 22px;
       font-weight: 600;
     }
 
     .updated-at {
-      padding-right: 320px;
       font-size: 14px;
     }
 
@@ -253,8 +199,15 @@ export default class UserDetail extends Vue {
       font-weight: 600;
     }
 
-    .user-infor {
-      line-height: 34px;
+    .music-item{
+      border: none;
+      font-size: 16px;
+
+      &.name{
+        padding-bottom: 4px;
+        font-size: 22px;
+        font-weight: 600;
+      }
     }
 
     .music-item:focus{
@@ -265,16 +218,9 @@ export default class UserDetail extends Vue {
       line-height: 34px;
     }
 
-    .input-change {
+    .input-change{
       padding: 4px 4px 4px 0;
-      border:none;
       border-bottom: 1px solid rgba(43, 43, 43, 0.15);
-      font-size: 16px;
-      transition: all 0.3s;
-
-      &:focus, &:hover {
-        border-bottom: 1px solid #007bff;
-      }
     }
 
     .select {
@@ -385,8 +331,16 @@ export default class UserDetail extends Vue {
     width: 25%;
   }
 
+  .col-4 {
+    width: 33.33333%;
+  }
+
   .col-6 {
     width: 50%;
+  }
+
+  .col-9{
+    width: 75%;
   }
 }
 </style>
