@@ -17,14 +17,14 @@
           :data="musicsLiked"
           :columns="columns1"
           :is-router-link="true"
-          :router-builder="'/musics/#{id}'"
+          :router-builder="'/dashboard/musics/#{id}'"
         />
         <Table
           v-if="tabNumber === 3"
           :data="albumsLiked"
           :columns="columns2"
           :is-router-link="true"
-          :router-builder="'/albums/#{id}'"
+          :router-builder="'/dashboard/albums/#{id}'"
         />
         <div v-if="tabNumber === 4" class="pass-container">
           <div class="update-password">
@@ -40,7 +40,7 @@
           :data="musics"
           :columns="columns1"
           :is-router-link="true"
-          :router-builder="'/musics/#{id}'"
+          :router-builder="'/dashboard/musics/#{id}'"
         />
         
       </Block>
@@ -50,7 +50,7 @@
           :data="albums"
           :columns="columns2"
           :is-router-link="true"
-          :router-builder="'/albums/#{id}'"
+          :router-builder="'/dashboard/albums/#{id}'"
         />
       </Block>
     </div>
@@ -159,7 +159,7 @@ export default class Uid extends Vue {
           title: "Success",
           description: "Password update successfully"
       })
-      this.$router.push('/users');
+      this.$router.push('/dashboard/users');
     } catch (error) {
       return error;
     }

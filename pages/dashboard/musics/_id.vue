@@ -10,7 +10,7 @@
           :data="comments"
           :columns="columns"
           :is-router-link="true"
-          :router-builder="'/comments/#{id}'"
+          :router-builder="'/dashboard/comments/#{id}'"
         />
       </Block>
     </div>

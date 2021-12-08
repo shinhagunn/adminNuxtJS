@@ -15,7 +15,7 @@
             :data="(musicsAblum === undefined) ? [] : musicsAblum"
             :columns="columns1"
             :is-router-link="false"
-            :router-builder="'/musics/#{id}'"
+            :router-builder="'/dashboard/musics/#{id}'"
             @handleActionRemove="handleActionRemove "
           />
         </Block>
@@ -25,7 +25,7 @@
             :data="musics"
             :columns="columns3"
             :is-router-link="false"
-            :router-builder="'/musics/#{id}'"
+            :router-builder="'/dashboard/musics/#{id}'"
             @handleActionAdd="handleActionAdd "
           />
         </Block>
@@ -36,7 +36,7 @@
           :data="(comments === undefined) ? [] : comments"
           :columns="columns2"
           :is-router-link="true"
-          :router-builder="'/musics/#{id}'"
+          :router-builder="'/dashboard/musics/#{id}'"
         />
       </Block>
     </div>
@@ -197,7 +197,7 @@ export default class id extends Vue {
           description: "Album update successfully"
       })
 
-      this.$router.push('/albums');
+      this.$router.push('/dashboard/albums');
     } catch (error) {
       return error;
     }

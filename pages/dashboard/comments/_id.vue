@@ -10,7 +10,7 @@
           :data="(comment.replies === undefined) ? [] : comment.replies"
           :columns="columns"
           :is-router-link="false"
-          :router-builder="'/comments/#{id}'"
+          :router-builder="'/dashboard/comments/#{id}'"
           @handleActionRemove="handleActionRemove"
         />
       </Block>

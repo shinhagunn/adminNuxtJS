@@ -6,7 +6,7 @@
           :data="users"
           :columns="columns"
           :is-router-link="true"
-          :router-builder="'/users/#{uid}'"
+          :router-builder="'/dashboard/users/#{uid}'"
           :onPagination="onPagination" 
           :quantityRowPerPage="quantityRowPerPage" 
         >

@@ -164,7 +164,7 @@ export default class MusicDetail extends Vue {
           description: "Music update successfully"
       })
 
-      this.$router.push('/musics');
+      this.$router.push('/dashboard/musics');
     } catch (error) {
       return error;
     }
@@ -177,7 +177,7 @@ export default class MusicDetail extends Vue {
           title: "Success",
           description: "Remove music successfully"
       })
-      this.$router.push('/musics');
+      this.$router.push('/dashboard/musics');
     } catch (error) {
       return error;
     }

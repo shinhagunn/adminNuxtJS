@@ -6,7 +6,7 @@
           :data="albums"
           :columns="columns"
           :is-router-link="true"
-          :router-builder="'/albums/#{id}'"
+          :router-builder="'/dashboard/albums/#{id}'"
         />
       </Block>
     </div>
