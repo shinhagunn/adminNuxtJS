@@ -22,6 +22,8 @@ const formatError = (e: any) => {
   const { response } = e;
   const { error } = response.data;
 
+  if (process.server) return
+
   // Check error
   ZNotification.error({
     title: "Error",

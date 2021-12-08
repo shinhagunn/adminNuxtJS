@@ -57,7 +57,7 @@ export default class Index extends Vue {
 
     try {
       await new ApiClient().post('identity/session', { email: this.email, password: this.password });
-      this.$router.push('/dashboard');
+      this.$router.push('/dashboard/users');
     } catch (error) {
       this.auth_error();
       return error;
