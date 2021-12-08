@@ -7,10 +7,10 @@
 
       <Block class="album-musics scroll-height">
         <Block class="col-6 table-album-music" blockName="Musics in album">
-          <input class="find" type="text" placeholder="Find music ...">
+          <!-- <input class="find" type="text" placeholder="Find music ...">
           <button class="find-btn">
             <i class="fas fa-search"></i>
-          </button>
+          </button> -->
           <Table
             :data="(musicsAblum === undefined) ? [] : musicsAblum"
             :columns="columns1"
@@ -21,10 +21,6 @@
         </Block>
 
         <Block class="col-6 table-album-music" blockName="Musics others">
-          <input class="find" type="text" placeholder="Find music ...">
-          <button class="find-btn">
-            <i class="fas fa-search"></i>
-          </button>
           <Table
             :data="musics"
             :columns="columns3"
