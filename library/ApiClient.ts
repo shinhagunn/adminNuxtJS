@@ -1,5 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { NuxtAxiosInstance } from "@nuxtjs/axios";
 import ZNotification from '@/library/z-notification'
+import config from "@/config"
 
 export const jsonToParam = (json: any, first_str = "?") => {
   const parts: string[] = [];
@@ -11,27 +13,28 @@ export const jsonToParam = (json: any, first_str = "?") => {
   }
   return parts.length ? first_str + parts.join("&") : "";
 };
+
 const sleep = async (ms: number) => {
   await new Promise<void>((resolve) => setTimeout(() => resolve(), ms));
 };
 
-const formatError =  (e: any) => {
+const formatError = (e: any) => {
   const { response } = e;
   const { error } = response.data;
 
+  // Check error
   ZNotification.error({
     title: "Error",
     description: window.$nuxt.$t(error).toString()
   })
-
   sleep(10);
 };
 
-const getClient = (baseURL: string) => {
-  const client = axios.create({ baseURL });
+const getClient = (baseURL: string, nuxt_axios?: NuxtAxiosInstance) => {
+  const client = (nuxt_axios || axios).create({ baseURL });
   client.interceptors.response.use(
-    (response) => {
-      Promise.resolve(response)
+    (response) => { 
+      return Promise.resolve(response)
     },
     (error) => {
       formatError(error);
@@ -43,8 +46,8 @@ const getClient = (baseURL: string) => {
 
 class ApiClient {
   private client: AxiosInstance;
-  constructor() {
-    this.client = getClient("http://localhost:3000/api/v2");
+  constructor(nuxt_axios?: NuxtAxiosInstance) {
+    this.client = getClient(config.api_url, nuxt_axios);
   }
 
   async get(url: string, data: any = {}, conf: AxiosRequestConfig = {}) {

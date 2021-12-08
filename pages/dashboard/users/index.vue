@@ -20,7 +20,8 @@
 <script lang="ts">
 import { Context } from '@nuxt/types'
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Align, Column, User, Filter, UserRole, UserState } from '~/types'
+import ApiClient from '@/library/ApiClient';
+import { Align, Column, User, Filter, UserRole, UserState } from '@/types'
 
 function handleUrl(url: string) {
   const position = url.indexOf('?');
@@ -132,7 +133,7 @@ export default class Admin extends Vue {
 
   async asyncData ({ $axios, route }: Context) {
     try{
-      const { data } = await $axios.get(`http://localhost:3000/api/v2/admin/users${handleUrl(route.fullPath)}`);
+      const { data } = await new ApiClient($axios).get(`admin/users${handleUrl(route.fullPath)}`);
 
       data.forEach( (user:User) => {
         const x = user.created_at.split('T')[0].split('-').join('/');
@@ -159,11 +160,11 @@ export default class Admin extends Vue {
   }
   
   .first_name {
-    flex: 0 0 120px;
+    flex: 0 0 150px;
   }
   
   .last_name {
-    flex: 0 0 120px;
+    flex: 0 0 150px;
   }
   
   .email {
@@ -171,7 +172,7 @@ export default class Admin extends Vue {
   }
 
   .uid {
-    flex: 1.5;
+    flex: 0 0 200px;
   }
   
   .state {
@@ -179,10 +180,6 @@ export default class Admin extends Vue {
   }
   
   .role {
-    flex: 1;
-  }
-  
-  .created_at {
     flex: 1;
   }
 }

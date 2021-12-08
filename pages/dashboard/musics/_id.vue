@@ -20,7 +20,8 @@
 <script lang='ts'>
 import { Context } from '@nuxt/types';
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Align, Column, Comment } from '~/types';
+import ApiClient from '@/library/ApiClient';
+import { Align, Column, Comment } from '@/types';
 
 @Component({
   middleware: ['check', 'notLogged'],
@@ -62,8 +63,8 @@ export default class Uid extends Vue {
 
   async asyncData ({ params, $axios }: Context) {
     const [myMusic, myComments] = await Promise.all([
-      $axios.get(`http://localhost:3000/api/v2/admin/musics/${params.id}`),
-      $axios.get(`http://localhost:3000/api/v2/public/musics/${params.id}/comments`)
+      new ApiClient($axios).get(`admin/musics/${params.id}`),
+      new ApiClient($axios).get(`public/musics/${params.id}/comments`)
     ])
 
     myComments.data.forEach( (comment: Comment) => {

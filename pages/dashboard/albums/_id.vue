@@ -209,9 +209,9 @@ export default class id extends Vue {
 
   async asyncData ({ params, $axios }: Context) {
     const [myAlbum, myComments, myMusics] = await Promise.all([
-      $axios.get(`http://localhost:3000/api/v2/admin/albums/${params.id}`),
-      $axios.get(`http://localhost:3000/api/v2/admin/comments?album_id=${params.id}`),
-      $axios.get(`http://localhost:3000/api/v2/admin/musics`)
+      new ApiClient($axios).get(`admin/albums/${params.id}`),
+      new ApiClient($axios).get(`admin/comments?album_id=${params.id}`),
+      new ApiClient($axios).get(`admin/musics`)
     ])
 
     myAlbum.data.created_at = myAlbum.data.created_at.split('T')[0].split('-').join('/');

@@ -16,7 +16,8 @@
 <script lang="ts">
 import { Context } from '@nuxt/types'
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Align, Column, Music, Filter, MusicState } from '~/types'
+import ApiClient from '@/library/ApiClient';
+import { Align, Column, Music, Filter, MusicState } from '@/types'
 
 function handleUrl(url: string) {
   const position = url.indexOf('?');
@@ -103,7 +104,7 @@ export default class Admin extends Vue {
 
   async asyncData ({ $axios, route }: Context) {
     try{
-      const { data } = await $axios.get(`http://localhost:3000/api/v2/admin/musics${handleUrl(route.fullPath)}`);
+      const { data } = await new ApiClient($axios).get(`admin/musics${handleUrl(route.fullPath)}`);
 
       data.forEach( (user:Music) => {
         const x = user.created_at.split('T')[0].split('-').join('/');
@@ -126,19 +127,19 @@ export default class Admin extends Vue {
   }
   
   .name{
-    flex: 3;
+    flex: 1;
   }
   
   .author{
-    flex: 2;
+    flex: 1;
   }
   
   .state{
-    flex: 1;
+    flex: 0 0 150px;
   }
   
   .created_at{
-    flex: 1;
+    flex: 0 0 150px;
   }
 }
 </style>

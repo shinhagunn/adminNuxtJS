@@ -16,7 +16,8 @@
 <script lang="ts">
 import { Context } from '@nuxt/types'
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Align, Column, Music, Filter, Comment } from '~/types'
+import ApiClient from '@/library/ApiClient';
+import { Align, Column, Music, Filter, Comment } from '@/types'
 
 function handleUrl(url: string) {
   const position = url.indexOf('?');
@@ -98,7 +99,7 @@ export default class Admin extends Vue {
 
   async asyncData ({ $axios, route }: Context) {
     try{
-      const { data } = await $axios.get(`http://localhost:3000/api/v2/admin/comments${handleUrl(route.fullPath)}`);
+      const { data } = await new ApiClient($axios).get(`admin/comments${handleUrl(route.fullPath)}`);
 
       data.forEach( (comment:Comment) => {
         const x = comment.created_at.split('T')[0].split('-').join('/');

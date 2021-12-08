@@ -6,6 +6,8 @@ WORKDIR /app
 
 COPY package.json ./
 
+ENV HOST 0.0.0.0
+
 RUN yarn install
 
 COPY . .

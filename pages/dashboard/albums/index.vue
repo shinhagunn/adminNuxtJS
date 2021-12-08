@@ -16,7 +16,8 @@
 <script lang="ts">
 import { Context } from '@nuxt/types'
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Align, Column, Filter, Album } from '~/types'
+import ApiClient from '@/library/ApiClient';
+import { Align, Column, Filter, Album } from '@/types'
 
 function handleUrl(url: string) {
   const position = url.indexOf('?');
@@ -89,7 +90,7 @@ export default class Admin extends Vue {
 
   async asyncData ({ $axios, route }: Context) {
     try{
-      const { data } = await $axios.get(`http://localhost:3000/api/v2/admin/albums${handleUrl(route.fullPath)}`);
+      const { data } = await new ApiClient($axios).get(`admin/albums${handleUrl(route.fullPath)}`);
 
       data.forEach( (album:Album) => {
         const x = album.created_at.split('T')[0].split('-').join('/');

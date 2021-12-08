@@ -1,9 +1,10 @@
 import { Context } from "@nuxt/types";
+import ApiClient from "@/library/ApiClient";
 import ZNotification from "@/library/z-notification"
 
 export default async function ({ store, redirect, $axios }: Context) {
   if(store.state.role !== 'admin') {
-    await $axios.delete('http://localhost:3000/api/v2/identity/session');
+    await  new ApiClient($axios).delete('identity/session');
     store.commit('setId', null);
     store.commit('setUid', null);
     store.commit('setFirstname', null);

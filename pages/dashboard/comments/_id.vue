@@ -90,7 +90,7 @@ export default class Uid extends Vue {
 
   async asyncData ({ params, $axios }: Context) {
     const [myComment] = await Promise.all([
-      $axios.get(`http://localhost:3000/api/v2/admin/comments/${params.id}`)
+      new ApiClient($axios).get(`admin/comments/${params.id}`)
     ])
 
     myComment.data.created_at = myComment.data.created_at.split('T')[0].split('-').join('/');

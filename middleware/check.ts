@@ -1,10 +1,12 @@
 import { Context } from "@nuxt/types";
+import ApiClient from "@/library/ApiClient";
 import ZNotification from "@/library/z-notification"
 
 export default async function ({ store, $axios } : Context) {
     try {
         if(!store.state.getLogged && store.state.isReload) {
-            const { data } = await $axios.get('http://localhost:3000/api/v2/resource/users/me');
+            const { data } = await new ApiClient($axios).get('resource/users/me');
+            
             store.commit('setId', data.id);
             store.commit('setUid', data.uid);
             store.commit('setFirstname', data.first_name);
@@ -24,6 +26,8 @@ export default async function ({ store, $axios } : Context) {
                     description: "Login successfully"
                 })
             }
+        } else {
+            store.commit('setReload', true);
         }
     }
     catch (error){

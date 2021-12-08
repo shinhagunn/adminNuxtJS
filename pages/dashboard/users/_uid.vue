@@ -35,7 +35,7 @@
         </div>
       </Block>
 
-      <Block v-if="tabNumber === 1" block-name="User Musics">
+      <Block v-if="tabNumber === 1" class="users" block-name="User Musics">
         <Table
           :data="musics"
           :columns="columns1"
@@ -45,7 +45,7 @@
         
       </Block>
 
-      <Block v-if="tabNumber === 1" block-name="User Albums">
+      <Block v-if="tabNumber === 1" class="users" block-name="User Albums">
         <Table
           :data="albums"
           :columns="columns2"
@@ -108,7 +108,7 @@ export default class Uid extends Vue {
     {
       key: 'created_at',
       title: 'Created at',
-      align: Align.Left
+      align: Align.Right
     }
   ]
 
@@ -167,11 +167,11 @@ export default class Uid extends Vue {
 
   async asyncData ({ params, $axios }: Context) {
     const [myUser, myMusic, musicsLiked, myAlbums, albumsLiked] = await Promise.all([
-      $axios.get(`http://localhost:3000/api/v2/admin/users/${params.uid}`),
-      $axios.get(`http://localhost:3000/api/v2/admin/musics?uid=${params.uid}`),
-      $axios.get(`http://localhost:3000/api/v2/public/users/${params.uid}/liked/musics`),
-      $axios.get(`http://localhost:3000/api/v2/admin/albums?uid=${params.uid}`),
-      $axios.get(`http://localhost:3000/api/v2/public/users/${params.uid}/liked/albums`),
+      new ApiClient($axios).get(`admin/users/${params.uid}`),
+      new ApiClient($axios).get(`admin/musics?uid=${params.uid}`),
+      new ApiClient($axios).get(`public/users/${params.uid}/liked/musics`),
+      new ApiClient($axios).get(`admin/albums?uid=${params.uid}`),
+      new ApiClient($axios).get(`public/users/${params.uid}/liked/albums`),
     ])
 
     myMusic.data.forEach( (music: Music) => {
@@ -282,6 +282,28 @@ export default class Uid extends Vue {
     background-color: #007bff;
     border: 1px solid #007bff;
     color: #fff;
+  }
+}
+
+.users {
+  .user_uid {
+    flex: 0 0 200px;
+  }
+
+  .state {
+    flex: 0 0  150px;
+  }
+
+  .role {
+    flex: 0 0  150px;
+  }
+
+  .view_count {
+    flex: 0 0 150px;
+  }
+
+  .created_at {
+    flex: 0 0 150px;
   }
 }
 </style>
