@@ -110,7 +110,7 @@ import { UserState, UserRole} from '~/types'
 export default class UserDetail extends Vue {
   @Prop() readonly user!: any
 
-  url = `https://learn.huuhait.me/api/v2/public/users/${this.user.uid}/avatar`;
+  url = `http://learn.huuhait.me/api/v2/public/users/${this.user.uid}/avatar`;
   first_name = this.user.first_name;
   last_name = this.user.last_name;
   state = this.user.state;

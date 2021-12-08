@@ -110,7 +110,7 @@ import { MusicState} from '~/types'
 export default class MusicDetail extends Vue {
   @Prop() readonly music!: any
 
-  url = `https://learn.huuhait.me/api/v2/public/musics/${this.music.id}/image`;
+  url = `http://learn.huuhait.me/api/v2/public/musics/${this.music.id}/image`;
   name = this.music.name;
   author = this.music.author;
   state = this.music.state;

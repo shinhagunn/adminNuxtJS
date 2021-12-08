@@ -49,7 +49,6 @@ import ApiClient from '~/library/ApiClient';
 export default class CommentDetail extends Vue {
   @Prop() readonly comment!: any
 
-  // url = `https://learn.huuhait.me/api/v2/public/musics/${this.music.id}/image`;
 
   formatDateData(data:string) {
     return data.split('T')[0].split('-').join('/');

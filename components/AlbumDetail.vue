@@ -74,7 +74,7 @@ export default class AlbumDetail extends Vue {
 
   name = this.album.name;
   description = this.album.description;
-  url = `https://learn.huuhait.me/api/v2/public/albums/${this.album.id}/image`;
+  url = `http://learn.huuhait.me/api/v2/public/albums/${this.album.id}/image`;
   avatar:any;
 
   formatDateData(data:string) {
