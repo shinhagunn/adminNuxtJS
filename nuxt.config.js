@@ -85,7 +85,7 @@ export default {
   },
 
   proxy: {
-    '/api/': 'https://learn.huuhait.me/',
+    '/api/': 'http://learn.huuhait.me/',
   },
   
   // PWA module configuration: https://go.nuxtjs.dev/pwa
