@@ -6,7 +6,7 @@
     <div class="login-block">
       <div class="login-main">
         <div class="login-form">
-          <h2 class="title">Login to MyMusic</h2>
+          <h2 class="title">Login to Dashboard</h2>
           <form action="" @submit.prevent>
             <div class="form-block">
               <label for="iemail">Email</label>
