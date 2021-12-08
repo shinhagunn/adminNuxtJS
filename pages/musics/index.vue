@@ -1,12 +1,12 @@
 <template>
   <LayoutAdmin :selected="selected" :pageName="pageName" :drawer="true" :filters="filters">
     <div class="main">
-      <Block class="comments" blockName="Table Comments">
+      <Block class="musics" blockName="Table Musics">
         <Table
-          :data="comments"
+          :data="musics"
           :columns="columns"
           :is-router-link="true"
-          :router-builder="'/dashboard/comments/#{id}'"
+          :router-builder="'/musics/#{id}'"
         />
       </Block>
     </div>
@@ -17,7 +17,7 @@
 import { Context } from '@nuxt/types'
 import { Component, Vue } from 'nuxt-property-decorator'
 import ApiClient from '@/library/ApiClient';
-import { Align, Column, Music, Filter, Comment } from '@/types'
+import { Align, Column, Music, Filter, MusicState } from '@/types'
 
 function handleUrl(url: string) {
   const position = url.indexOf('?');
@@ -34,7 +34,7 @@ function handleUrl(url: string) {
 export default class Admin extends Vue {
   head() {
     return {
-      title: 'Comments',
+      title: 'Musics',
     }
   }
 
@@ -43,28 +43,28 @@ export default class Admin extends Vue {
       id: 1,
       default: '',
       type: String,
-      title: 'Album_ID',
+      title: 'UID',
       transform: 'text'
     },
     {
       id: 2,
       default: '',
-      type: String,
-      title: 'Music_ID',
-      transform: 'text'
+      type: MusicState,
+      title: 'State',
+      transform: 'dropdown'
     },
     {
       id: 3,
       default: '',
       type: String,
-      title: 'Content',
+      title: 'Name',
       transform: 'text'
     },
     {
       id: 4,
       default: '',
       type: String,
-      title: 'User_UID',
+      title: 'Author',
       transform: 'text'
     },
   ]
@@ -76,37 +76,42 @@ export default class Admin extends Vue {
       align: Align.Left,  
     },
     {
-      key: 'user_uid',
-      title: 'User UID',
+      key: 'name',
+      title: 'Name',
       align: Align.Left,
     },
     {
-      key: 'content',
-      title: 'Content',
+      key: 'author',
+      title: 'Author',
+      align: Align.Left,
+    },
+    {
+      key: 'state',
+      title: 'State',
       align: Align.Left,
     },
     {
       key: 'created_at',
-      title: 'Created At',
-      align: Align.Right,
+      title: 'Created at',
+      align: Align.Right
     }
   ]
 
-  comment: Music[] = []
+  musics: Music[] = []
 
-  selected: number = 4
-  pageName: string = 'Comments'
+  selected: number = 3
+  pageName: string = 'Musics'
 
   async asyncData ({ $axios, route }: Context) {
     try{
-      const { data } = await new ApiClient($axios).get(`admin/comments${handleUrl(route.fullPath)}`);
+      const { data } = await new ApiClient($axios).get(`admin/musics${handleUrl(route.fullPath)}`);
 
-      data.forEach( (comment:Comment) => {
-        const x = comment.created_at.split('T')[0].split('-').join('/');
-        comment.created_at = x;
+      data.forEach( (user:Music) => {
+        const x = user.created_at.split('T')[0].split('-').join('/');
+        user.created_at = x;
       });
       return {
-        comments: data
+        musics: data
       }
     } catch(error) {
       return error;
@@ -116,17 +121,25 @@ export default class Admin extends Vue {
 </script>
 
 <style lang="less">
-.comments {
-  .id {
+.musics{
+  .id{
     flex: 0 0 80px;
   }
   
-  .content {
+  .name{
     flex: 1;
   }
   
-  .created_at {
+  .author{
     flex: 1;
+  }
+  
+  .state{
+    flex: 0 0 150px;
+  }
+  
+  .created_at{
+    flex: 0 0 150px;
   }
 }
 </style>

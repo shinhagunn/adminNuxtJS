@@ -107,6 +107,6 @@ export default {
         },
       },
     },
-    publicPath: process.env.NODE_ENV === "production" ? "/dashboard" : "/"
+    publicPath: process.env.NODE_ENV === "production" ? "/dashboard/_nuxt/" : "/_nuxt/"
   }
 }

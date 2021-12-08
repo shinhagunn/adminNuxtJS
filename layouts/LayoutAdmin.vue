@@ -7,26 +7,26 @@
             </h2>
             <ul class="menu-list">
                 <li :class="['item', {'item-selected': (selected == 2)}]">
-                    <nuxt-link to="/dashboard/users">
+                    <nuxt-link to="/users">
                         <i class="fas fa-user"></i>
                         Users
                     </nuxt-link>
                     
                 </li>
                 <li :class="['item', {'item-selected': (selected == 3)}]">
-                    <nuxt-link to="/dashboard/musics">
+                    <nuxt-link to="/musics">
                         <i class="fas fa-music"></i>
                         Musics
                     </nuxt-link>
                 </li>
                 <li :class="['item', {'item-selected': (selected == 4)}]">
-                    <nuxt-link to="/dashboard/comments">
+                    <nuxt-link to="/comments">
                         <i class="fas fa-comment"></i>
                         Comments
                     </nuxt-link>
                 </li>
                 <li :class="['item', {'item-selected': (selected == 5)}]">
-                    <nuxt-link to="/dashboard/albums">
+                    <nuxt-link to="/albums">
                         <i class="fas fa-compact-disc"></i>
                         Albums
                     </nuxt-link>
@@ -167,7 +167,7 @@ export default class LayoutAdmin extends Vue{
                 description: "Logout successfully"
             })
 
-            this.$router.push('/dashboard/login');
+            this.$router.push('/login');
         } catch (error) {
             return error;
         }

@@ -15,7 +15,7 @@ export default function ({ store, redirect}: Context) {
     store.commit('setLogged', false);
     store.commit('setReload', true);
 
-    return redirect('/dashboard/login');
+    return redirect('/login');
   } 
 }
 

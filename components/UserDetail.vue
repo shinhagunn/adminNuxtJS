@@ -177,7 +177,7 @@ export default class UserDetail extends Vue {
           description: "User update successfully"
       })
 
-      this.$router.push('/dashboard/users');
+      this.$router.push('/users');
     } catch (error) {
       return error;
     }

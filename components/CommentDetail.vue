@@ -61,7 +61,7 @@ export default class CommentDetail extends Vue {
           title: "Success",
           description: "Remove comment successfully"
       })
-      this.$router.push('/dashboard/comments');
+      this.$router.push('/comments');
     } catch (error) {
       return error;
     }

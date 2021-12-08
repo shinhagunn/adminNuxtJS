@@ -51,7 +51,7 @@
       </div>
 
       <div class="col-3">
-        <nuxt-link :to="`/dashboard/users/${music.user_uid}`" class="music-infor">{{music.user_uid}}</nuxt-link>
+        <nuxt-link :to="`/users/${music.user_uid}`" class="music-infor">{{music.user_uid}}</nuxt-link>
       </div>
       <div class="col-3">
         <DropDown placement="bottomLeft">
@@ -164,7 +164,7 @@ export default class MusicDetail extends Vue {
           description: "Music update successfully"
       })
 
-      this.$router.push('/dashboard/musics');
+      this.$router.push('/musics');
     } catch (error) {
       return error;
     }
@@ -177,7 +177,7 @@ export default class MusicDetail extends Vue {
           title: "Success",
           description: "Remove music successfully"
       })
-      this.$router.push('/dashboard/musics');
+      this.$router.push('/musics');
     } catch (error) {
       return error;
     }

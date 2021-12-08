@@ -101,7 +101,7 @@ export default class AlbumDetail extends Vue {
           description: "Remove album successfully"
       })
       
-      this.$router.push('/dashboard/albums');
+      this.$router.push('/albums');
     } catch (error) {
       return error;
     }
