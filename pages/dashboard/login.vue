@@ -51,7 +51,6 @@ import ApiClient from '~/library/ApiClient';
 })
 export default class Index extends Vue {
   email = '';
-  password = '';
 
   async login() {
 
